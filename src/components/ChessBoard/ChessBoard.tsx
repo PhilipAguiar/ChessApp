@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Piece, Tile } from "../../types";
-import { pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
+import { knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import "./ChessBoard.scss";
 
@@ -120,12 +120,18 @@ function ChessBoard() {
   const handleDrag = () => {
     const newBoard = [...board];
 
-    if (draggedPiece && draggedPiece.name === "pawn") {
-      pawnMovement(draggedPiece, newBoard);
-    }
+    if (draggedPiece) {
+      if (draggedPiece.name === "pawn") {
+        pawnMovement(draggedPiece, newBoard);
+      }
 
-    if (draggedPiece && draggedPiece.name === "rook") {
-      rookMovement(draggedPiece, newBoard);
+      if (draggedPiece.name === "rook") {
+        rookMovement(draggedPiece, newBoard);
+      }
+
+      if (draggedPiece.name === "knight") {
+        knightMovement(draggedPiece, newBoard);
+      }
     }
 
     setBoard(newBoard);

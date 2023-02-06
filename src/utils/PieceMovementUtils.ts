@@ -43,8 +43,6 @@ export const pawnMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) 
 };
 
 export const rookMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
-  let integer = draggedPiece.color === "white" ? -1 : 1;
-
   //check how many spaces the rook can move vertically. breaks when hits a tile with a unit
 
   for (let index = draggedPiece.coordinates!.y + 1; index <= 7; index++) {
@@ -100,3 +98,25 @@ export const rookMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) 
     }
   }
 };
+
+export const knightMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
+  if (draggedPiece.coordinates!.y + 2 <= 7) {
+    if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
+      newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].moveable = true;
+    }
+    if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
+      newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].moveable = true;
+    }
+  }
+
+  if (draggedPiece.coordinates!.y - 2 >= 0) {
+    if (newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
+      newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x + 1].moveable = true;
+    }
+    if (newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
+      newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x - 1].moveable = true;
+    }
+  }
+};
+
+export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {};
