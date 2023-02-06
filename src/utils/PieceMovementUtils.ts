@@ -45,10 +45,58 @@ export const pawnMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) 
 export const rookMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
   let integer = draggedPiece.color === "white" ? -1 : 1;
 
-  let upint = draggedPiece.coordinates!.y + integer;
+  //check how many spaces the rook can move vertically. breaks when hits a tile with a unit
 
-  while (upint <= 7) {
-    newBoard[draggedPiece.coordinates!.y + upint][draggedPiece.coordinates!.x].moveable = true;
-    upint++;
+  for (let index = draggedPiece.coordinates!.y + 1; index <= 7; index++) {
+    if (!newBoard[index][draggedPiece.coordinates!.x].piece) {
+      newBoard[index][draggedPiece.coordinates!.x].moveable = true;
+    }
+
+    if (newBoard[index][draggedPiece.coordinates!.x].piece) {
+      if (newBoard[index][draggedPiece.coordinates!.x].piece?.color !== draggedPiece.color) {
+        newBoard[index][draggedPiece.coordinates!.x].moveable = true;
+        debugger;
+      }
+      break;
+    }
+  }
+
+  for (let index = draggedPiece.coordinates!.y - 1; index >= 0; index--) {
+    if (!newBoard[index][draggedPiece.coordinates!.x].piece) {
+      newBoard[index][draggedPiece.coordinates!.x].moveable = true;
+    }
+
+    if (newBoard[index][draggedPiece.coordinates!.x].piece) {
+      if (newBoard[index][draggedPiece.coordinates!.x].piece?.color !== draggedPiece.color) {
+        newBoard[index][draggedPiece.coordinates!.x].moveable = true;
+      }
+      break;
+    }
+  }
+
+  for (let index = draggedPiece.coordinates!.x + 1; index <= 7; index++) {
+    if (!newBoard[draggedPiece.coordinates!.y][index].piece) {
+      newBoard[draggedPiece.coordinates!.y][index].moveable = true;
+    }
+
+    if (newBoard[draggedPiece.coordinates!.y][index].piece) {
+      if (newBoard[draggedPiece.coordinates!.y][index].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y][index].moveable = true;
+      }
+      break;
+    }
+  }
+
+  for (let index = draggedPiece.coordinates!.x - 1; index >= 0; index--) {
+    if (!newBoard[draggedPiece.coordinates!.y][index].piece) {
+      newBoard[draggedPiece.coordinates!.y][index].moveable = true;
+    }
+
+    if (newBoard[draggedPiece.coordinates!.y][index].piece) {
+      if (newBoard[draggedPiece.coordinates!.y][index].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y][index].moveable = true;
+      }
+      break;
+    }
   }
 };

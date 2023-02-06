@@ -34,7 +34,7 @@ function BoardTile({ coordinates, alternate, tile, updateDraggedPiece, handleDro
       {/* <p>{`${tile?.moveable}`}</p> */}
       {/* <p>{`${coordinates.x}, ${coordinates.y}`}</p> */}
       <p>{piece?.name}</p>
-      {/* <p>{piece?.color}</p> */}
+      <p>{piece?.color}</p>
     </div>
   );
 }

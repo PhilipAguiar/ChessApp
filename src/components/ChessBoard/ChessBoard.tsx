@@ -99,7 +99,7 @@ function ChessBoard() {
       const newBoard = [...board];
 
       if (!(draggedPiece.coordinates?.x === x && draggedPiece?.coordinates.y === y)) {
-        if (draggedPiece.name === "pawn" && newBoard[y][x].moveable) {
+        if (newBoard[y][x].moveable) {
           newBoard[y][x] = board[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x];
           newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x] = { piece: null, moveable: false };
         }
