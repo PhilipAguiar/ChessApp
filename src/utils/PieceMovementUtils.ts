@@ -135,6 +135,57 @@ export const knightMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>
       }
     }
   }
+  if (draggedPiece.coordinates!.y + 2 <= 7) {
+    if (draggedPiece.coordinates!.x + 1 <= 7) {
+      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].moveable = true;
+      }
+    }
+    if (draggedPiece.coordinates!.x - 1 >= 0) {
+      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].moveable = true;
+      }
+    }
+  }
+
+  if (draggedPiece.coordinates!.y + 2 <= 7) {
+    if (draggedPiece.coordinates!.x + 1 <= 7) {
+      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].moveable = true;
+      }
+    }
+    if (draggedPiece.coordinates!.x - 1 >= 0) {
+      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].moveable = true;
+      }
+    }
+  }
+
+  if (draggedPiece.coordinates!.x - 2 >= 0) {
+    if (draggedPiece.coordinates!.y + 1 <= 7) {
+      if (newBoard[draggedPiece.coordinates!.y + 1][draggedPiece.coordinates!.x - 2].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y + 1][draggedPiece.coordinates!.x - 2].moveable = true;
+      }
+    }
+    if (draggedPiece.coordinates!.y - 1 >= 0) {
+      if (newBoard[draggedPiece.coordinates!.y - 1][draggedPiece.coordinates!.x - 2].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y - 1][draggedPiece.coordinates!.x - 2].moveable = true;
+      }
+    }
+  }
+
+  if (draggedPiece.coordinates!.x + 2 <= 7) {
+    if (draggedPiece.coordinates!.y + 1 <= 7) {
+      if (newBoard[draggedPiece.coordinates!.y + 1][draggedPiece.coordinates!.x + 2].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y + 1][draggedPiece.coordinates!.x + 2].moveable = true;
+      }
+    }
+    if (draggedPiece.coordinates!.y - 1 >= 0) {
+      if (newBoard[draggedPiece.coordinates!.y - 1][draggedPiece.coordinates!.x + 2].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y - 1][draggedPiece.coordinates!.x + 2].moveable = true;
+      }
+    }
+  }
 };
 
 export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
