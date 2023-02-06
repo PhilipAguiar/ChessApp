@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Piece, Tile } from "../../types";
-import { knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
+import { bishopMovement, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import "./ChessBoard.scss";
 
@@ -131,6 +131,18 @@ function ChessBoard() {
 
       if (draggedPiece.name === "knight") {
         knightMovement(draggedPiece, newBoard);
+      }
+
+      if (draggedPiece.name === "bishop") {
+        bishopMovement(draggedPiece, newBoard);
+      }
+      if (draggedPiece.name === "queen") {
+        rookMovement(draggedPiece, newBoard);
+        bishopMovement(draggedPiece, newBoard);
+      }
+
+      if (draggedPiece.name === "king") {
+        kingMovement(draggedPiece, newBoard);
       }
     }
 

@@ -1,5 +1,15 @@
 import { Piece, Tile } from "../types";
 
+const isEnemyColor = (piece1?: Piece, piece2?: Piece): boolean => {
+  if (piece1 && piece2) {
+    if (piece1.color === piece2.color) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 export const pawnMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
   //var to handle direction of pawns
   let integer = draggedPiece.color === "white" ? -1 : 1;
@@ -127,4 +137,134 @@ export const knightMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>
   }
 };
 
-export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {};
+export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
+  let SE = true;
+  let SW = true;
+  let NE = true;
+  let NW = true;
+
+  for (let index = 1; index <= 7; index++) {
+    //SE
+    if (!(draggedPiece.coordinates!.x + index > 7 || draggedPiece.coordinates!.y + index > 7)) {
+      let newTile = newBoard[draggedPiece.coordinates!.y + index][draggedPiece.coordinates!.x + index];
+      if (SE && isEnemyColor(draggedPiece, newTile.piece!)) {
+        newTile.moveable = true;
+      }
+      if (newTile.piece) {
+        SE = false;
+      }
+    }
+
+    //SW
+    if (!(draggedPiece.coordinates!.x - index < 0 || draggedPiece.coordinates!.y + index > 7)) {
+      let newTile = newBoard[draggedPiece.coordinates!.y + index][draggedPiece.coordinates!.x - index];
+      if (SW && isEnemyColor(draggedPiece, newTile.piece!)) {
+        newTile.moveable = true;
+      }
+
+      if (newTile.piece) {
+        SW = false;
+      }
+    }
+
+    //NE
+    if (!(draggedPiece.coordinates!.x - index < 0 || draggedPiece.coordinates!.y - index < 0)) {
+      let newTile = newBoard[draggedPiece.coordinates!.y - index][draggedPiece.coordinates!.x - index];
+
+      if (NE && isEnemyColor(draggedPiece, newTile.piece!)) {
+        newTile.moveable = true;
+      }
+
+      if (newTile.piece) {
+        NE = false;
+      }
+    }
+
+    //Nw
+    if (!(draggedPiece.coordinates!.x + index > 7 || draggedPiece.coordinates!.y - index < 0)) {
+      let newTile = newBoard[draggedPiece.coordinates!.y - index][draggedPiece.coordinates!.x + index];
+
+      if (NW && isEnemyColor(draggedPiece, newTile.piece!)) {
+        newTile.moveable = true;
+      }
+
+      if (newTile.piece) {
+        NW = false;
+      }
+    }
+  }
+};
+
+export const kingMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
+  let integer = draggedPiece.color === "white" ? -1 : 1;
+
+  //vertical movement
+  if (draggedPiece.coordinates!.y + integer >= 0 && draggedPiece.coordinates!.y + integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x].piece!, draggedPiece)) {
+      newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x].moveable = true;
+    }
+  }
+  if (draggedPiece.coordinates!.y - integer >= 0 && draggedPiece.coordinates!.y - integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x].piece!, draggedPiece)) {
+      newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x].moveable = true;
+    }
+  }
+
+  //horizontal
+  if (draggedPiece.coordinates!.x + integer >= 0 && draggedPiece.coordinates!.x + integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x + integer].piece!, draggedPiece)) {
+      newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x + integer].moveable = true;
+    }
+  }
+  if (draggedPiece.coordinates!.x - integer >= 0 && draggedPiece.coordinates!.x - integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x - integer].piece!, draggedPiece)) {
+      newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x - integer].moveable = true;
+    }
+  }
+
+  //diagonal movement
+
+  if (
+    draggedPiece.coordinates!.x + integer >= 0 &&
+    draggedPiece.coordinates!.x + integer <= 7 &&
+    draggedPiece.coordinates!.y + integer >= 0 &&
+    draggedPiece.coordinates!.y + integer <= 7
+  ) {
+    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x + integer].piece!, draggedPiece)) {
+      newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x + integer].moveable = true;
+    }
+  }
+
+  if (
+    draggedPiece.coordinates!.x - integer >= 0 &&
+    draggedPiece.coordinates!.x - integer <= 7 &&
+    draggedPiece.coordinates!.y + integer >= 0 &&
+    draggedPiece.coordinates!.y + integer <= 7
+  ) {
+    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x - integer].piece!, draggedPiece)) {
+      newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x - integer].moveable = true;
+    }
+  }
+
+  if (
+    draggedPiece.coordinates!.x - integer >= 0 &&
+    draggedPiece.coordinates!.x - integer <= 7 &&
+    draggedPiece.coordinates!.y - integer >= 0 &&
+    draggedPiece.coordinates!.y - integer <= 7
+  ) {
+    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x - integer].piece!, draggedPiece)) {
+      newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x - integer].moveable = true;
+    }
+  }
+
+  if (
+    draggedPiece.coordinates!.x + integer >= 0 &&
+    draggedPiece.coordinates!.x + integer <= 7 &&
+    draggedPiece.coordinates!.y - integer >= 0 &&
+    draggedPiece.coordinates!.y - integer <= 7
+  ) {
+    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x + integer].piece!, draggedPiece)) {
+      newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x + integer].moveable = true;
+    }
+  }
+};
