@@ -101,20 +101,28 @@ export const rookMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) 
 
 export const knightMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
   if (draggedPiece.coordinates!.y + 2 <= 7) {
-    if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
-      newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].moveable = true;
+    if (draggedPiece.coordinates!.x + 1 <= 7) {
+      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].moveable = true;
+      }
     }
-    if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
-      newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].moveable = true;
+    if (draggedPiece.coordinates!.x - 1 >= 0) {
+      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].moveable = true;
+      }
     }
   }
 
   if (draggedPiece.coordinates!.y - 2 >= 0) {
-    if (newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
-      newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x + 1].moveable = true;
+    if (draggedPiece.coordinates!.x + 1 <= 7) {
+      if (newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x + 1].moveable = true;
+      }
     }
-    if (newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
-      newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x - 1].moveable = true;
+    if (draggedPiece.coordinates!.x - 1 >= 0) {
+      if (newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
+        newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x - 1].moveable = true;
+      }
     }
   }
 };
