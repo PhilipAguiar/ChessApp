@@ -21,7 +21,7 @@ function BoardTile({ coordinates, alternate, tile, updateDraggedPiece, handleDro
       }}
       onDragStart={() => {
         if (piece) {
-          let draggedPiece: Piece = { name: piece.name, color: piece.color, coordinates: coordinates };
+          let draggedPiece: Piece = { name: piece.name, color: piece.color, x: coordinates.x, y: coordinates.y };
           updateDraggedPiece(draggedPiece);
         }
       }}
@@ -34,7 +34,7 @@ function BoardTile({ coordinates, alternate, tile, updateDraggedPiece, handleDro
       {/* <p>{`${tile?.moveable}`}</p> */}
       {/* <p>{`${coordinates.x}, ${coordinates.y}`}</p> */}
       <p>{piece?.name}</p>
-      <p>{piece?.color}</p>
+      {/* <p>{piece?.color}</p> */}
     </div>
   );
 }

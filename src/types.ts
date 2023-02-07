@@ -10,5 +10,6 @@ export type Tile = {
 export type Piece = {
   color: string;
   name: string;
-  coordinates?: Coordinates;
+  x?: number;
+  y?: number;
 };

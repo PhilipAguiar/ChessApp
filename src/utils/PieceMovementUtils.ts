@@ -10,185 +10,201 @@ const isEnemyColor = (piece1?: Piece, piece2?: Piece): boolean => {
   return true;
 };
 
-export const pawnMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
+export const pawnMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>): Array<Tile> => {
   //var to handle direction of pawns
+  const availableMoves: Array<Tile> = [];
+
   let integer = draggedPiece.color === "white" ? -1 : 1;
 
   //check if pawn is at starting spot for ability to move two squares
 
-  if (draggedPiece.color === "white" && draggedPiece.coordinates!.y === 6) {
-    if (!newBoard[draggedPiece.coordinates!.y + integer * 2][draggedPiece.coordinates!.x].piece) {
-      newBoard[draggedPiece.coordinates!.y + integer * 2][draggedPiece.coordinates!.x].moveable = true;
+  if (draggedPiece.color === "white" && draggedPiece.y! === 6) {
+    if (!newBoard[draggedPiece.y! + integer * 2][draggedPiece.x!].piece) {
+      availableMoves.push(newBoard[draggedPiece.y! + integer * 2][draggedPiece.x!]);
     }
   }
 
-  if (draggedPiece.color === "black" && draggedPiece.coordinates!.y === 1) {
-    if (!newBoard[draggedPiece.coordinates!.y + integer * 2][draggedPiece.coordinates!.x].piece) {
-      newBoard[draggedPiece.coordinates!.y + integer * 2][draggedPiece.coordinates!.x].moveable = true;
+  if (draggedPiece.color === "black" && draggedPiece.y! === 1) {
+    if (!newBoard[draggedPiece.y! + integer * 2][draggedPiece.x!].piece) {
+      availableMoves.push(newBoard[draggedPiece.y! + integer * 2][draggedPiece.x!]);
     }
   }
 
   //Check if a piece is in front of the pawn before being able to move forward
-  if (!newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x].piece) {
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x].moveable = true;
+  if (!newBoard[draggedPiece.y! + integer][draggedPiece.x!].piece) {
+    availableMoves.push(newBoard[draggedPiece.y! + integer][draggedPiece.x!]);
   }
 
   // check if a opposite color piece is diagonally adjacent to attack
 
   if (
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x + integer] &&
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x + integer].piece &&
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x + integer].piece?.color !== draggedPiece.color
+    newBoard[draggedPiece.y! + integer][draggedPiece.x! + integer] &&
+    newBoard[draggedPiece.y! + integer][draggedPiece.x! + integer].piece &&
+    newBoard[draggedPiece.y! + integer][draggedPiece.x! + integer].piece?.color !== draggedPiece.color
   ) {
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x + integer].moveable = true;
+    availableMoves.push(newBoard[draggedPiece.y! + integer][draggedPiece.x! + integer]);
   }
 
   if (
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x - integer] &&
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x - integer].piece &&
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x - integer].piece?.color !== draggedPiece.color
+    newBoard[draggedPiece.y! + integer][draggedPiece.x! - integer] &&
+    newBoard[draggedPiece.y! + integer][draggedPiece.x! - integer].piece &&
+    newBoard[draggedPiece.y! + integer][draggedPiece.x! - integer].piece?.color !== draggedPiece.color
   ) {
-    newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x - integer].moveable = true;
+    availableMoves.push(newBoard[draggedPiece.y! + integer][draggedPiece.x! - integer]);
   }
+  return availableMoves;
 };
 
-export const rookMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
+export const rookMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>): Array<Tile> => {
   //check how many spaces the rook can move vertically. breaks when hits a tile with a unit
+  const availableMoves: Array<Tile> = [];
+  for (let index = draggedPiece.y! + 1; index <= 7; index++) {
+    let tile = newBoard[index][draggedPiece.x!];
 
-  for (let index = draggedPiece.coordinates!.y + 1; index <= 7; index++) {
-    if (!newBoard[index][draggedPiece.coordinates!.x].piece) {
-      newBoard[index][draggedPiece.coordinates!.x].moveable = true;
+    if (!tile.piece) {
+      availableMoves.push(tile);
     }
 
-    if (newBoard[index][draggedPiece.coordinates!.x].piece) {
-      if (newBoard[index][draggedPiece.coordinates!.x].piece?.color !== draggedPiece.color) {
-        newBoard[index][draggedPiece.coordinates!.x].moveable = true;
-        debugger;
+    if (tile.piece) {
+      if (tile.piece?.color !== draggedPiece.color) {
+        availableMoves.push(tile);
       }
       break;
     }
   }
 
-  for (let index = draggedPiece.coordinates!.y - 1; index >= 0; index--) {
-    if (!newBoard[index][draggedPiece.coordinates!.x].piece) {
-      newBoard[index][draggedPiece.coordinates!.x].moveable = true;
+  for (let index = draggedPiece.y! - 1; index >= 0; index--) {
+    let tile = newBoard[index][draggedPiece.x!];
+
+    if (!tile.piece) {
+      availableMoves.push(tile);
     }
 
-    if (newBoard[index][draggedPiece.coordinates!.x].piece) {
-      if (newBoard[index][draggedPiece.coordinates!.x].piece?.color !== draggedPiece.color) {
-        newBoard[index][draggedPiece.coordinates!.x].moveable = true;
+    if (tile.piece) {
+      if (tile.piece?.color !== draggedPiece.color) {
+        availableMoves.push(tile);
       }
       break;
     }
   }
 
-  for (let index = draggedPiece.coordinates!.x + 1; index <= 7; index++) {
-    if (!newBoard[draggedPiece.coordinates!.y][index].piece) {
-      newBoard[draggedPiece.coordinates!.y][index].moveable = true;
+  for (let index = draggedPiece.x! + 1; index <= 7; index++) {
+    let tile = newBoard[draggedPiece.y!][index];
+
+    if (!tile.piece) {
+      availableMoves.push(tile);
     }
 
-    if (newBoard[draggedPiece.coordinates!.y][index].piece) {
-      if (newBoard[draggedPiece.coordinates!.y][index].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y][index].moveable = true;
+    if (tile.piece) {
+      if (tile.piece?.color !== draggedPiece.color) {
+        availableMoves.push(tile);
       }
       break;
     }
   }
 
-  for (let index = draggedPiece.coordinates!.x - 1; index >= 0; index--) {
-    if (!newBoard[draggedPiece.coordinates!.y][index].piece) {
-      newBoard[draggedPiece.coordinates!.y][index].moveable = true;
+  for (let index = draggedPiece.x! - 1; index >= 0; index--) {
+    let tile = newBoard[draggedPiece.y!][index];
+
+    if (!tile.piece) {
+      availableMoves.push(tile);
     }
 
-    if (newBoard[draggedPiece.coordinates!.y][index].piece) {
-      if (newBoard[draggedPiece.coordinates!.y][index].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y][index].moveable = true;
+    if (tile.piece) {
+      if (tile.piece?.color !== draggedPiece.color) {
+        availableMoves.push(tile);
       }
       break;
     }
   }
+  return availableMoves;
 };
 
-export const knightMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
-  if (draggedPiece.coordinates!.y + 2 <= 7) {
-    if (draggedPiece.coordinates!.x + 1 <= 7) {
-      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].moveable = true;
+export const knightMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>): Array<Tile> => {
+  const availableMoves: Array<Tile> = [];
+
+  if (draggedPiece.y! + 2 <= 7) {
+    if (draggedPiece.x! + 1 <= 7) {
+      if (newBoard[draggedPiece.y! + 2][draggedPiece.x! + 1].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! + 2][draggedPiece.x! + 1]);
       }
     }
-    if (draggedPiece.coordinates!.x - 1 >= 0) {
-      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].moveable = true;
+    if (draggedPiece.x! - 1 >= 0) {
+      if (newBoard[draggedPiece.y! + 2][draggedPiece.x! - 1].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! + 2][draggedPiece.x! - 1]);
       }
     }
   }
 
-  if (draggedPiece.coordinates!.y - 2 >= 0) {
-    if (draggedPiece.coordinates!.x + 1 <= 7) {
-      if (newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x + 1].moveable = true;
+  if (draggedPiece.y! - 2 >= 0) {
+    if (draggedPiece.x! + 1 <= 7) {
+      if (newBoard[draggedPiece.y! - 2][draggedPiece.x! + 1].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! - 2][draggedPiece.x! + 1]);
       }
     }
-    if (draggedPiece.coordinates!.x - 1 >= 0) {
-      if (newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y - 2][draggedPiece.coordinates!.x - 1].moveable = true;
-      }
-    }
-  }
-  if (draggedPiece.coordinates!.y + 2 <= 7) {
-    if (draggedPiece.coordinates!.x + 1 <= 7) {
-      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].moveable = true;
-      }
-    }
-    if (draggedPiece.coordinates!.x - 1 >= 0) {
-      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].moveable = true;
+    if (draggedPiece.x! - 1 >= 0) {
+      if (newBoard[draggedPiece.y! - 2][draggedPiece.x! - 1].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! - 2][draggedPiece.x! - 1]);
       }
     }
   }
-
-  if (draggedPiece.coordinates!.y + 2 <= 7) {
-    if (draggedPiece.coordinates!.x + 1 <= 7) {
-      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x + 1].moveable = true;
+  if (draggedPiece.y! + 2 <= 7) {
+    if (draggedPiece.x! + 1 <= 7) {
+      if (newBoard[draggedPiece.y! + 2][draggedPiece.x! + 1].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! + 2][draggedPiece.x! + 1]);
       }
     }
-    if (draggedPiece.coordinates!.x - 1 >= 0) {
-      if (newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y + 2][draggedPiece.coordinates!.x - 1].moveable = true;
+    if (draggedPiece.x! - 1 >= 0) {
+      if (newBoard[draggedPiece.y! + 2][draggedPiece.x! - 1].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! + 2][draggedPiece.x! - 1]);
       }
     }
   }
 
-  if (draggedPiece.coordinates!.x - 2 >= 0) {
-    if (draggedPiece.coordinates!.y + 1 <= 7) {
-      if (newBoard[draggedPiece.coordinates!.y + 1][draggedPiece.coordinates!.x - 2].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y + 1][draggedPiece.coordinates!.x - 2].moveable = true;
+  if (draggedPiece.y! + 2 <= 7) {
+    if (draggedPiece.x! + 1 <= 7) {
+      if (newBoard[draggedPiece.y! + 2][draggedPiece.x! + 1].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! + 2][draggedPiece.x! + 1]);
       }
     }
-    if (draggedPiece.coordinates!.y - 1 >= 0) {
-      if (newBoard[draggedPiece.coordinates!.y - 1][draggedPiece.coordinates!.x - 2].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y - 1][draggedPiece.coordinates!.x - 2].moveable = true;
+    if (draggedPiece.x! - 1 >= 0) {
+      if (newBoard[draggedPiece.y! + 2][draggedPiece.x! - 1].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! + 2][draggedPiece.x! - 1]);
       }
     }
   }
 
-  if (draggedPiece.coordinates!.x + 2 <= 7) {
-    if (draggedPiece.coordinates!.y + 1 <= 7) {
-      if (newBoard[draggedPiece.coordinates!.y + 1][draggedPiece.coordinates!.x + 2].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y + 1][draggedPiece.coordinates!.x + 2].moveable = true;
+  if (draggedPiece.x! - 2 >= 0) {
+    if (draggedPiece.y! + 1 <= 7) {
+      if (newBoard[draggedPiece.y! + 1][draggedPiece.x! - 2].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! + 1][draggedPiece.x! - 2]);
       }
     }
-    if (draggedPiece.coordinates!.y - 1 >= 0) {
-      if (newBoard[draggedPiece.coordinates!.y - 1][draggedPiece.coordinates!.x + 2].piece?.color !== draggedPiece.color) {
-        newBoard[draggedPiece.coordinates!.y - 1][draggedPiece.coordinates!.x + 2].moveable = true;
+    if (draggedPiece.y! - 1 >= 0) {
+      if (newBoard[draggedPiece.y! - 1][draggedPiece.x! - 2].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! - 1][draggedPiece.x! - 2]);
       }
     }
   }
+
+  if (draggedPiece.x! + 2 <= 7) {
+    if (draggedPiece.y! + 1 <= 7) {
+      if (newBoard[draggedPiece.y! + 1][draggedPiece.x! + 2].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! + 1][draggedPiece.x! + 2]);
+      }
+    }
+    if (draggedPiece.y! - 1 >= 0) {
+      if (newBoard[draggedPiece.y! - 1][draggedPiece.x! + 2].piece?.color !== draggedPiece.color) {
+        availableMoves.push(newBoard[draggedPiece.y! - 1][draggedPiece.x! + 2]);
+      }
+    }
+  }
+  return availableMoves;
 };
 
-export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
+export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>): Array<Tile> => {
+  const availableMoves: Array<Tile> = [];
+
   let SE = true;
   let SW = true;
   let NE = true;
@@ -196,10 +212,10 @@ export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>
 
   for (let index = 1; index <= 7; index++) {
     //SE
-    if (!(draggedPiece.coordinates!.x + index > 7 || draggedPiece.coordinates!.y + index > 7)) {
-      let newTile = newBoard[draggedPiece.coordinates!.y + index][draggedPiece.coordinates!.x + index];
+    if (!(draggedPiece.x! + index > 7 || draggedPiece.y! + index > 7)) {
+      let newTile = newBoard[draggedPiece.y! + index][draggedPiece.x! + index];
       if (SE && isEnemyColor(draggedPiece, newTile.piece!)) {
-        newTile.moveable = true;
+        availableMoves.push(newTile);
       }
       if (newTile.piece) {
         SE = false;
@@ -207,10 +223,10 @@ export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>
     }
 
     //SW
-    if (!(draggedPiece.coordinates!.x - index < 0 || draggedPiece.coordinates!.y + index > 7)) {
-      let newTile = newBoard[draggedPiece.coordinates!.y + index][draggedPiece.coordinates!.x - index];
+    if (!(draggedPiece.x! - index < 0 || draggedPiece.y! + index > 7)) {
+      let newTile = newBoard[draggedPiece.y! + index][draggedPiece.x! - index];
       if (SW && isEnemyColor(draggedPiece, newTile.piece!)) {
-        newTile.moveable = true;
+        availableMoves.push(newTile);
       }
 
       if (newTile.piece) {
@@ -219,11 +235,11 @@ export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>
     }
 
     //NE
-    if (!(draggedPiece.coordinates!.x - index < 0 || draggedPiece.coordinates!.y - index < 0)) {
-      let newTile = newBoard[draggedPiece.coordinates!.y - index][draggedPiece.coordinates!.x - index];
+    if (!(draggedPiece.x! - index < 0 || draggedPiece.y! - index < 0)) {
+      let newTile = newBoard[draggedPiece.y! - index][draggedPiece.x! - index];
 
       if (NE && isEnemyColor(draggedPiece, newTile.piece!)) {
-        newTile.moveable = true;
+        availableMoves.push(newTile);
       }
 
       if (newTile.piece) {
@@ -232,11 +248,11 @@ export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>
     }
 
     //Nw
-    if (!(draggedPiece.coordinates!.x + index > 7 || draggedPiece.coordinates!.y - index < 0)) {
-      let newTile = newBoard[draggedPiece.coordinates!.y - index][draggedPiece.coordinates!.x + index];
+    if (!(draggedPiece.x! + index > 7 || draggedPiece.y! - index < 0)) {
+      let newTile = newBoard[draggedPiece.y! - index][draggedPiece.x! + index];
 
       if (NW && isEnemyColor(draggedPiece, newTile.piece!)) {
-        newTile.moveable = true;
+        availableMoves.push(newTile);
       }
 
       if (newTile.piece) {
@@ -244,78 +260,63 @@ export const bishopMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>
       }
     }
   }
+
+  return availableMoves;
 };
 
-export const kingMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>) => {
+export const kingMovement = (draggedPiece: Piece, newBoard: Array<Array<Tile>>): Array<Tile> => {
+  const availableMoves: Array<Tile> = [];
+
   let integer = draggedPiece.color === "white" ? -1 : 1;
 
   //vertical movement
-  if (draggedPiece.coordinates!.y + integer >= 0 && draggedPiece.coordinates!.y + integer <= 7) {
-    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x].piece!, draggedPiece)) {
-      newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x].moveable = true;
+  if (draggedPiece.y! + integer >= 0 && draggedPiece.y! + integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.y! + integer][draggedPiece.x!].piece!, draggedPiece)) {
+      availableMoves.push(newBoard[draggedPiece.y! + integer][draggedPiece.x!]);
     }
   }
-  if (draggedPiece.coordinates!.y - integer >= 0 && draggedPiece.coordinates!.y - integer <= 7) {
-    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x].piece!, draggedPiece)) {
-      newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x].moveable = true;
+  if (draggedPiece.y! - integer >= 0 && draggedPiece.y! - integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.y! - integer][draggedPiece.x!].piece!, draggedPiece)) {
+      availableMoves.push(newBoard[draggedPiece.y! - integer][draggedPiece.x!]);
     }
   }
 
   //horizontal
-  if (draggedPiece.coordinates!.x + integer >= 0 && draggedPiece.coordinates!.x + integer <= 7) {
-    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x + integer].piece!, draggedPiece)) {
-      newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x + integer].moveable = true;
+  if (draggedPiece.x! + integer >= 0 && draggedPiece.x! + integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.y!][draggedPiece.x! + integer].piece!, draggedPiece)) {
+      availableMoves.push(newBoard[draggedPiece.y!][draggedPiece.x! + integer]);
     }
   }
-  if (draggedPiece.coordinates!.x - integer >= 0 && draggedPiece.coordinates!.x - integer <= 7) {
-    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x - integer].piece!, draggedPiece)) {
-      newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x - integer].moveable = true;
+  if (draggedPiece.x! - integer >= 0 && draggedPiece.x! - integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.y!][draggedPiece.x! - integer].piece!, draggedPiece)) {
+      availableMoves.push(newBoard[draggedPiece.y!][draggedPiece.x! - integer]);
     }
   }
 
   //diagonal movement
 
-  if (
-    draggedPiece.coordinates!.x + integer >= 0 &&
-    draggedPiece.coordinates!.x + integer <= 7 &&
-    draggedPiece.coordinates!.y + integer >= 0 &&
-    draggedPiece.coordinates!.y + integer <= 7
-  ) {
-    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x + integer].piece!, draggedPiece)) {
-      newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x + integer].moveable = true;
+  if (draggedPiece.x! + integer >= 0 && draggedPiece.x! + integer <= 7 && draggedPiece.y! + integer >= 0 && draggedPiece.y! + integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.y! + integer][draggedPiece.x! + integer].piece!, draggedPiece)) {
+      availableMoves.push(newBoard[draggedPiece.y! + integer][draggedPiece.x! + integer]);
     }
   }
 
-  if (
-    draggedPiece.coordinates!.x - integer >= 0 &&
-    draggedPiece.coordinates!.x - integer <= 7 &&
-    draggedPiece.coordinates!.y + integer >= 0 &&
-    draggedPiece.coordinates!.y + integer <= 7
-  ) {
-    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x - integer].piece!, draggedPiece)) {
-      newBoard[draggedPiece.coordinates!.y + integer][draggedPiece.coordinates!.x - integer].moveable = true;
+  if (draggedPiece.x! - integer >= 0 && draggedPiece.x! - integer <= 7 && draggedPiece.y! + integer >= 0 && draggedPiece.y! + integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.y! + integer][draggedPiece.x! - integer].piece!, draggedPiece)) {
+      availableMoves.push(newBoard[draggedPiece.y! + integer][draggedPiece.x! - integer]);
     }
   }
 
-  if (
-    draggedPiece.coordinates!.x - integer >= 0 &&
-    draggedPiece.coordinates!.x - integer <= 7 &&
-    draggedPiece.coordinates!.y - integer >= 0 &&
-    draggedPiece.coordinates!.y - integer <= 7
-  ) {
-    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x - integer].piece!, draggedPiece)) {
-      newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x - integer].moveable = true;
+  if (draggedPiece.x! - integer >= 0 && draggedPiece.x! - integer <= 7 && draggedPiece.y! - integer >= 0 && draggedPiece.y! - integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.y! - integer][draggedPiece.x! - integer].piece!, draggedPiece)) {
+      availableMoves.push(newBoard[draggedPiece.y! - integer][draggedPiece.x! - integer]);
     }
   }
 
-  if (
-    draggedPiece.coordinates!.x + integer >= 0 &&
-    draggedPiece.coordinates!.x + integer <= 7 &&
-    draggedPiece.coordinates!.y - integer >= 0 &&
-    draggedPiece.coordinates!.y - integer <= 7
-  ) {
-    if (isEnemyColor(newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x + integer].piece!, draggedPiece)) {
-      newBoard[draggedPiece.coordinates!.y - integer][draggedPiece.coordinates!.x + integer].moveable = true;
+  if (draggedPiece.x! + integer >= 0 && draggedPiece.x! + integer <= 7 && draggedPiece.y! - integer >= 0 && draggedPiece.y! - integer <= 7) {
+    if (isEnemyColor(newBoard[draggedPiece.y! - integer][draggedPiece.x! + integer].piece!, draggedPiece)) {
+      availableMoves.push(newBoard[draggedPiece.y! - integer][draggedPiece.x! + integer]);
     }
   }
+  return availableMoves;
 };

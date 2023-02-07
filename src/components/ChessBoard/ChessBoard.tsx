@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Piece, Tile } from "../../types";
+import { isKingInCheck } from "../../utils/isKingInCheck";
 import { bishopMovement, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import "./ChessBoard.scss";
@@ -98,10 +99,10 @@ function ChessBoard() {
     if (draggedPiece) {
       const newBoard = [...board];
 
-      if (!(draggedPiece.coordinates?.x === x && draggedPiece?.coordinates.y === y)) {
+      if (!(draggedPiece.x === x && draggedPiece?.y === y)) {
         if (newBoard[y][x].moveable) {
-          newBoard[y][x] = board[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x];
-          newBoard[draggedPiece.coordinates!.y][draggedPiece.coordinates!.x] = { piece: null, moveable: false };
+          newBoard[y][x] = board[draggedPiece!.y!][draggedPiece!.x!];
+          newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false };
         }
       }
 
@@ -119,30 +120,45 @@ function ChessBoard() {
 
   const handleDrag = () => {
     const newBoard = [...board];
+    isKingInCheck(draggedPiece!.color, newBoard);
 
     if (draggedPiece) {
       if (draggedPiece.name === "pawn") {
-        pawnMovement(draggedPiece, newBoard);
+        pawnMovement(draggedPiece, newBoard).forEach((tile) => {
+          tile.moveable = true;
+        });
       }
 
       if (draggedPiece.name === "rook") {
-        rookMovement(draggedPiece, newBoard);
+        rookMovement(draggedPiece, newBoard).forEach((tile) => {
+          tile.moveable = true;
+        });
       }
 
       if (draggedPiece.name === "knight") {
-        knightMovement(draggedPiece, newBoard);
+        knightMovement(draggedPiece, newBoard).forEach((tile) => {
+          tile.moveable = true;
+        });
       }
 
       if (draggedPiece.name === "bishop") {
-        bishopMovement(draggedPiece, newBoard);
+        bishopMovement(draggedPiece, newBoard).forEach((tile) => {
+          tile.moveable = true;
+        });
       }
       if (draggedPiece.name === "queen") {
-        rookMovement(draggedPiece, newBoard);
-        bishopMovement(draggedPiece, newBoard);
+        rookMovement(draggedPiece, newBoard).forEach((tile) => {
+          tile.moveable = true;
+        });
+        bishopMovement(draggedPiece, newBoard).forEach((tile) => {
+          tile.moveable = true;
+        });
       }
 
       if (draggedPiece.name === "king") {
-        kingMovement(draggedPiece, newBoard);
+        kingMovement(draggedPiece, newBoard).forEach((tile) => {
+          tile.moveable = true;
+        });
       }
     }
 
