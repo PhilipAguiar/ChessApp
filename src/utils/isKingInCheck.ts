@@ -1,17 +1,65 @@
-import { Tile } from "../types";
-import { pawnMovement } from "./PieceMovementUtils";
+import { Piece, Tile } from "../types";
+import { bishopMovement, knightMovement, pawnAttacks, rookMovement } from "./PieceMovementUtils";
 
-export const isKingInCheck = (playersTurn: string, newBoard: Array<Array<Tile>>): boolean => {
+export const isKingInCheck = (newBoard: Array<Array<Tile>>): boolean => {
+  let output = false;
   newBoard.forEach((row, y) => {
     row.forEach((tile, x) => {
       const { piece } = tile;
-      if (piece && piece.color === playersTurn) {
+
+      if (piece) {
+        const newPiece: Piece = {
+          name: piece.name,
+          color: piece.color,
+          x: x,
+          y: y,
+        };
+
         switch (piece?.name) {
           case "pawn":
-            console.log(pawnMovement(piece, newBoard));
+            pawnAttacks(newPiece, newBoard).forEach((tile) => {
+              if (tile.piece?.name === "king") {
+                output = true;
+              }
+            });
 
             break;
           case "rook":
+            rookMovement(newPiece, newBoard).forEach((tile) => {
+              if (tile.piece?.name === "king") {
+                output = true;
+              }
+            });
+            break;
+
+          case "bishop":
+            bishopMovement(newPiece, newBoard).forEach((tile) => {
+              if (tile.piece?.name === "king") {
+                output = true;
+              }
+            });
+            break;
+
+          case "knight":
+            knightMovement(newPiece, newBoard).forEach((tile) => {
+              if (tile.piece?.name === "king") {
+                output = true;
+              }
+            });
+            break;
+
+          case "queen":
+            bishopMovement(newPiece, newBoard).forEach((tile) => {
+              if (tile.piece?.name === "king") {
+                output = true;
+              }
+            });
+            rookMovement(newPiece, newBoard).forEach((tile) => {
+              if (tile.piece?.name === "king") {
+                output = true;
+              }
+            });
+
             break;
           default:
             break;
@@ -20,50 +68,5 @@ export const isKingInCheck = (playersTurn: string, newBoard: Array<Array<Tile>>)
     });
   });
 
-  return false;
-};
-
-const isPawnCheck = (playersTurn: string, x: number, y: number, newBoard: Array<Array<Tile>>): boolean => {
-  let integer = playersTurn === "white" ? -1 : 1;
-
-  if (playersTurn === "black") {
-    if (
-      x + integer <= 7 &&
-      newBoard[y + integer][x + integer].piece?.name === "king" &&
-      newBoard[y + integer][x + integer].piece?.color !== playersTurn
-    ) {
-      alert("CHECK");
-    }
-
-    if (
-      x - integer >= 0 &&
-      newBoard[y + integer][x - integer].piece?.name === "king" &&
-      newBoard[y + integer][x + integer].piece?.color === playersTurn
-    ) {
-      alert("CHECK");
-    }
-  }
-
-  if (playersTurn === "white") {
-    if (
-      x + integer >= 0 &&
-      newBoard[y + integer][x + integer].piece?.name === "king" &&
-      newBoard[y + integer][x + integer].piece?.color !== playersTurn
-    ) {
-      alert("PAWN CHECK");
-    }
-
-    if (
-      x - integer <= 7 &&
-      newBoard[y + integer][x - integer].piece?.name === "king" &&
-      newBoard[y + integer][x + integer].piece?.color === playersTurn
-    ) {
-      alert("PAWN CHECK");
-    }
-  }
-  return false;
-};
-
-const isRookCheck = (playersTurn: string, x: number, y: number, newBoard: Array<Array<Tile>>): boolean => {
-  return false;
+  return output;
 };

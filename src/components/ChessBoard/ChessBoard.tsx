@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { Piece, Tile } from "../../types";
-import { isKingInCheck } from "../../utils/isKingInCheck";
-import { bishopMovement, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
+import { calculateCheckMate } from "../../utils/calculateCheckMate";
+import {
+  bishopMovement,
+  isValidKingMove,
+  isValidMove,
+  kingMovement,
+  knightMovement,
+  pawnMovement,
+  rookMovement,
+} from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import "./ChessBoard.scss";
 
@@ -89,21 +97,28 @@ function ChessBoard() {
     ],
   ]);
 
+  const [playerTurn, setPlayerTurn] = useState<string>("white");
+
   const [draggedPiece, setDraggedPiece] = useState<Piece | null>(null);
 
   const updateDraggedPiece = (updateDraggedPiece: Piece) => {
     setDraggedPiece(updateDraggedPiece);
   };
 
-  const handleDrop = (x: number, y: number) => {
+  const handleDrop = async (x: number, y: number) => {
     if (draggedPiece) {
-      const newBoard = [...board];
+      let newBoard = board.map((arr) => {
+        return arr.slice();
+      });
 
       if (!(draggedPiece.x === x && draggedPiece?.y === y)) {
         if (newBoard[y][x].moveable) {
           newBoard[y][x] = board[draggedPiece!.y!][draggedPiece!.x!];
           newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false };
         }
+        calculateCheckMate(newBoard, playerTurn);
+
+        setPlayerTurn((prevValue) => (prevValue === "white" ? "black" : "white"));
       }
 
       newBoard.forEach((row) => {
@@ -114,39 +129,37 @@ function ChessBoard() {
 
       setBoard(newBoard);
     }
-
     setDraggedPiece(null);
   };
 
   const handleDrag = () => {
     const newBoard = [...board];
-    isKingInCheck(draggedPiece!.color, newBoard);
 
-    if (draggedPiece) {
-      if (draggedPiece.name === "pawn") {
+    if (draggedPiece && draggedPiece.color === playerTurn) {
+      if (draggedPiece.name === "pawn" && isValidMove(draggedPiece, newBoard)) {
         pawnMovement(draggedPiece, newBoard).forEach((tile) => {
           tile.moveable = true;
         });
       }
 
-      if (draggedPiece.name === "rook") {
+      if (draggedPiece.name === "rook" && isValidMove(draggedPiece, newBoard)) {
         rookMovement(draggedPiece, newBoard).forEach((tile) => {
           tile.moveable = true;
         });
       }
 
-      if (draggedPiece.name === "knight") {
+      if (draggedPiece.name === "knight" && isValidMove(draggedPiece, newBoard)) {
         knightMovement(draggedPiece, newBoard).forEach((tile) => {
           tile.moveable = true;
         });
       }
 
-      if (draggedPiece.name === "bishop") {
+      if (draggedPiece.name === "bishop" && isValidMove(draggedPiece, newBoard)) {
         bishopMovement(draggedPiece, newBoard).forEach((tile) => {
           tile.moveable = true;
         });
       }
-      if (draggedPiece.name === "queen") {
+      if (draggedPiece.name === "queen" && isValidMove(draggedPiece, newBoard)) {
         rookMovement(draggedPiece, newBoard).forEach((tile) => {
           tile.moveable = true;
         });
@@ -155,7 +168,7 @@ function ChessBoard() {
         });
       }
 
-      if (draggedPiece.name === "king") {
+      if (draggedPiece.name === "king" && isValidKingMove(draggedPiece, newBoard, draggedPiece.x!, draggedPiece.y!)) {
         kingMovement(draggedPiece, newBoard).forEach((tile) => {
           tile.moveable = true;
         });
