@@ -1,13 +1,13 @@
 import { Piece, Tile } from "../types";
 import { bishopMovement, knightMovement, pawnAttacks, rookMovement } from "./PieceMovementUtils";
 
-export const isKingInCheck = (newBoard: Array<Array<Tile>>): boolean => {
+export const isKingInCheck = (newBoard: Array<Array<Tile>>, playersTurn: string): boolean => {
   let output = false;
   newBoard.forEach((row, y) => {
     row.forEach((tile, x) => {
       const { piece } = tile;
 
-      if (piece) {
+      if (piece && piece.color !== playersTurn) {
         const newPiece: Piece = {
           name: piece.name,
           color: piece.color,
@@ -18,7 +18,7 @@ export const isKingInCheck = (newBoard: Array<Array<Tile>>): boolean => {
         switch (piece?.name) {
           case "pawn":
             pawnAttacks(newPiece, newBoard).forEach((tile) => {
-              if (tile.piece?.name === "king") {
+              if (newBoard[tile.y][tile.x].piece?.name === "king") {
                 output = true;
               }
             });
@@ -34,7 +34,7 @@ export const isKingInCheck = (newBoard: Array<Array<Tile>>): boolean => {
 
           case "bishop":
             bishopMovement(newPiece, newBoard).forEach((tile) => {
-              if (tile.piece?.name === "king") {
+              if (newBoard[tile.y][tile.x].piece?.name === "king") {
                 output = true;
               }
             });
@@ -50,7 +50,7 @@ export const isKingInCheck = (newBoard: Array<Array<Tile>>): boolean => {
 
           case "queen":
             bishopMovement(newPiece, newBoard).forEach((tile) => {
-              if (tile.piece?.name === "king") {
+              if (newBoard[tile.y][tile.x].piece?.name === "king") {
                 output = true;
               }
             });

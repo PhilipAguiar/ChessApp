@@ -1,4 +1,4 @@
-import { Piece, Tile } from "../types";
+import { Coordinates, Piece, Tile } from "../types";
 import { isKingInCheck } from "./isKingInCheck";
 
 const isEnemyColor = (piece1?: Piece, piece2?: Piece): boolean => {
@@ -11,28 +11,28 @@ const isEnemyColor = (piece1?: Piece, piece2?: Piece): boolean => {
   return true;
 };
 
-export const pawnMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Tile> => {
+export const pawnMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Coordinates> => {
   //var to handle direction of pawns
-  let availableMoves: Array<Tile> = [];
+  let availableMoves: Array<Coordinates> = [];
 
   let integer = draggedPiece.color === "white" ? -1 : 1;
 
   //check if pawn is at starting spot for ability to move two squares
   if (draggedPiece.color === "white" && draggedPiece.y! === 6) {
     if (!board[draggedPiece.y! + integer * 2][draggedPiece.x!].piece) {
-      availableMoves.push(board[draggedPiece.y! + integer * 2][draggedPiece.x!]);
+      availableMoves.push({ y: draggedPiece.y! + integer * 2, x: draggedPiece.x! });
     }
   }
 
   if (draggedPiece.color === "black" && draggedPiece.y! === 1) {
     if (!board[draggedPiece.y! + integer * 2][draggedPiece.x!].piece) {
-      availableMoves.push(board[draggedPiece.y! + integer * 2][draggedPiece.x!]);
+      availableMoves.push({ y: draggedPiece.y! + integer * 2, x: draggedPiece.x! });
     }
   }
 
   //Check if a piece is in front of the pawn before being able to move forward
   if (!board[draggedPiece.y! + integer][draggedPiece.x!].piece) {
-    availableMoves.push(board[draggedPiece.y! + integer][draggedPiece.x!]);
+    availableMoves.push({ y: draggedPiece.y! + integer, x: draggedPiece.x! });
   }
 
   // check if a opposite color piece is diagonally adjacent to attack
@@ -189,8 +189,8 @@ export const knightMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): 
   return availableMoves;
 };
 
-export const bishopMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Tile> => {
-  const availableMoves: Array<Tile> = [];
+export const bishopMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Coordinates> => {
+  const availableMoves: Array<Coordinates> = [];
 
   let SE = true;
   let SW = true;
@@ -201,7 +201,7 @@ export const bishopMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): 
     if (!(draggedPiece.x! + index > 7 || draggedPiece.y! + index > 7)) {
       let newTile = board[draggedPiece.y! + index][draggedPiece.x! + index];
       if (SE && isEnemyColor(draggedPiece, newTile.piece!)) {
-        availableMoves.push(newTile);
+        availableMoves.push({ x: draggedPiece.x! + index, y: draggedPiece.y! + index });
       }
       if (newTile.piece) {
         SE = false;
@@ -212,7 +212,7 @@ export const bishopMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): 
     if (!(draggedPiece.x! - index < 0 || draggedPiece.y! + index > 7)) {
       let newTile = board[draggedPiece.y! + index][draggedPiece.x! - index];
       if (SW && isEnemyColor(draggedPiece, newTile.piece!)) {
-        availableMoves.push(newTile);
+        availableMoves.push({ x: draggedPiece.x! - index, y: draggedPiece.y! + index });
       }
 
       if (newTile.piece) {
@@ -225,7 +225,7 @@ export const bishopMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): 
       let newTile = board[draggedPiece.y! - index][draggedPiece.x! - index];
 
       if (NE && isEnemyColor(draggedPiece, newTile.piece!)) {
-        availableMoves.push(newTile);
+        availableMoves.push({ x: draggedPiece.x! - index, y: draggedPiece.y! - index });
       }
 
       if (newTile.piece) {
@@ -238,7 +238,7 @@ export const bishopMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): 
       let newTile = board[draggedPiece.y! - index][draggedPiece.x! + index];
 
       if (NW && isEnemyColor(draggedPiece, newTile.piece!)) {
-        availableMoves.push(newTile);
+        availableMoves.push({ x: draggedPiece.x! + index, y: draggedPiece.y! - index });
       }
 
       if (newTile.piece) {
@@ -321,17 +321,17 @@ export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
   return availableMoves;
 };
 
-export const pawnAttacks = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Tile> => {
+export const pawnAttacks = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Coordinates> => {
   let integer = draggedPiece.color === "white" ? -1 : 1;
 
-  const availableMoves: Array<Tile> = [];
+  const availableMoves: Array<Coordinates> = [];
 
   if (
     board[draggedPiece.y! + integer][draggedPiece.x! + integer] &&
     board[draggedPiece.y! + integer][draggedPiece.x! + integer].piece &&
     board[draggedPiece.y! + integer][draggedPiece.x! + integer].piece?.color !== draggedPiece.color
   ) {
-    availableMoves.push(board[draggedPiece.y! + integer][draggedPiece.x! + integer]);
+    availableMoves.push({ y: draggedPiece.y! + integer, x: draggedPiece.x! + integer });
   }
 
   if (
@@ -339,19 +339,20 @@ export const pawnAttacks = (draggedPiece: Piece, board: Array<Array<Tile>>): Arr
     board[draggedPiece.y! + integer][draggedPiece.x! - integer].piece &&
     board[draggedPiece.y! + integer][draggedPiece.x! - integer].piece?.color !== draggedPiece.color
   ) {
-    availableMoves.push(board[draggedPiece.y! + integer][draggedPiece.x! - integer]);
+    availableMoves.push({ y: draggedPiece.y! + integer, x: draggedPiece.x! - integer });
   }
   return availableMoves;
 };
 
 export const isValidMove = (draggedPiece: Piece, board: Array<Array<Tile>>) => {
-  let newBoard = board.map((arr) => {
-    return arr.slice();
+  let newBoard = board.map((a) => {
+    return a.map((b) => {
+      return { ...b };
+    });
   });
-
   newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false };
 
-  if (!isKingInCheck(newBoard)) {
+  if (!isKingInCheck(newBoard, draggedPiece.color)) {
     return true;
   } else {
     return false;
@@ -359,14 +360,16 @@ export const isValidMove = (draggedPiece: Piece, board: Array<Array<Tile>>) => {
 };
 
 export const isValidKingMove = (draggedPiece: Piece, board: Array<Array<Tile>>, x: number, y: number) => {
-  let newBoard = board.map((arr) => {
-    return arr.slice();
+  let newBoard = board.map((a) => {
+    return a.map((b) => {
+      return { ...b };
+    });
   });
 
   newBoard[y][x] = newBoard[draggedPiece.y!][draggedPiece.x!];
   newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false };
 
-  if (!isKingInCheck(newBoard)) {
+  if (!isKingInCheck(newBoard, draggedPiece.color)) {
     return true;
   } else {
     return false;

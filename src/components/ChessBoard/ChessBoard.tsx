@@ -107,8 +107,10 @@ function ChessBoard() {
 
   const handleDrop = async (x: number, y: number) => {
     if (draggedPiece) {
-      let newBoard = board.map((arr) => {
-        return arr.slice();
+      let newBoard = board.map((a) => {
+        return a.map((b) => {
+          return { ...b };
+        });
       });
 
       if (!(draggedPiece.x === x && draggedPiece?.y === y)) {
@@ -133,12 +135,16 @@ function ChessBoard() {
   };
 
   const handleDrag = () => {
-    const newBoard = [...board];
+    let newBoard = board.map((a) => {
+      return a.map((b) => {
+        return { ...b };
+      });
+    });
 
     if (draggedPiece && draggedPiece.color === playerTurn) {
       if (draggedPiece.name === "pawn" && isValidMove(draggedPiece, newBoard)) {
         pawnMovement(draggedPiece, newBoard).forEach((tile) => {
-          tile.moveable = true;
+          newBoard[tile.y][tile.x].moveable = true;
         });
       }
 
@@ -154,17 +160,21 @@ function ChessBoard() {
         });
       }
 
-      if (draggedPiece.name === "bishop" && isValidMove(draggedPiece, newBoard)) {
+      if (draggedPiece.name === "bishop") {
         bishopMovement(draggedPiece, newBoard).forEach((tile) => {
-          tile.moveable = true;
+          if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+            newBoard[tile.y][tile.x].moveable = true;
+          }
         });
       }
-      if (draggedPiece.name === "queen" && isValidMove(draggedPiece, newBoard)) {
+      if (draggedPiece.name === "queen") {
         rookMovement(draggedPiece, newBoard).forEach((tile) => {
           tile.moveable = true;
         });
         bishopMovement(draggedPiece, newBoard).forEach((tile) => {
-          tile.moveable = true;
+          if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+            newBoard[tile.y][tile.x].moveable = true;
+          }
         });
       }
 
