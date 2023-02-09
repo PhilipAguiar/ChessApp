@@ -1,6 +1,6 @@
 import { Piece, Tile } from "../types";
 import { isKingInCheck } from "./isKingInCheck";
-import { bishopMovement, kingMovement, pawnAttacks, pawnMovement } from "./PieceMovementUtils";
+import { bishopMovement, kingMovement, pawnAttacks, pawnMovement, rookMovement } from "./PieceMovementUtils";
 
 export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string) => {
   let checkmate = true;
@@ -52,6 +52,22 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
             });
             break;
           }
+          case "rook": {
+            rookMovement(newPiece, board).forEach((test) => {
+              let newBoard = board.map((a) => {
+                return a.map((b) => {
+                  return { ...b };
+                });
+              });
+
+              newBoard[test.y][test.x].piece = { name: "rook", color: playerTurn };
+              if (!isKingInCheck(newBoard, playerTurn)) {
+                checkmate = false;
+              }
+            });
+            break;
+          }
+
           default:
             break;
         }

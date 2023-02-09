@@ -26,7 +26,7 @@ export const isKingInCheck = (newBoard: Array<Array<Tile>>, playersTurn: string)
             break;
           case "rook":
             rookMovement(newPiece, newBoard).forEach((tile) => {
-              if (tile.piece?.name === "king") {
+              if (newBoard[tile.y][tile.x].piece?.name === "king") {
                 output = true;
               }
             });
@@ -55,7 +55,7 @@ export const isKingInCheck = (newBoard: Array<Array<Tile>>, playersTurn: string)
               }
             });
             rookMovement(newPiece, newBoard).forEach((tile) => {
-              if (tile.piece?.name === "king") {
+              if (newBoard[tile.y][tile.x].piece?.name === "king") {
                 output = true;
               }
             });

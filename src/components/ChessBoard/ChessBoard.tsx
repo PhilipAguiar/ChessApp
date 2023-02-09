@@ -148,9 +148,11 @@ function ChessBoard() {
         });
       }
 
-      if (draggedPiece.name === "rook" && isValidMove(draggedPiece, newBoard)) {
+      if (draggedPiece.name === "rook") {
         rookMovement(draggedPiece, newBoard).forEach((tile) => {
-          tile.moveable = true;
+          if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+            newBoard[tile.y][tile.x].moveable = true;
+          }
         });
       }
 
@@ -169,7 +171,9 @@ function ChessBoard() {
       }
       if (draggedPiece.name === "queen") {
         rookMovement(draggedPiece, newBoard).forEach((tile) => {
-          tile.moveable = true;
+          if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+            newBoard[tile.y][tile.x].moveable = true;
+          }
         });
         bishopMovement(draggedPiece, newBoard).forEach((tile) => {
           if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {

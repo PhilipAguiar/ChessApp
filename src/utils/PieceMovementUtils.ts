@@ -41,19 +41,19 @@ export const pawnMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
   return availableMoves;
 };
 
-export const rookMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Tile> => {
+export const rookMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Coordinates> => {
   //check how many spaces the rook can move vertically. breaks when hits a tile with a unit
-  const availableMoves: Array<Tile> = [];
+  const availableMoves: Array<Coordinates> = [];
   for (let index = draggedPiece.y! + 1; index <= 7; index++) {
     let tile = board[index][draggedPiece.x!];
 
     if (!tile.piece) {
-      availableMoves.push(tile);
+      availableMoves.push({ y: index, x: draggedPiece.x! });
     }
 
     if (tile.piece) {
       if (tile.piece?.color !== draggedPiece.color) {
-        availableMoves.push(tile);
+        availableMoves.push({ y: index, x: draggedPiece.x! });
       }
       break;
     }
@@ -63,12 +63,12 @@ export const rookMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
     let tile = board[index][draggedPiece.x!];
 
     if (!tile.piece) {
-      availableMoves.push(tile);
+      availableMoves.push({ y: index, x: draggedPiece.x! });
     }
 
     if (tile.piece) {
       if (tile.piece?.color !== draggedPiece.color) {
-        availableMoves.push(tile);
+        availableMoves.push({ y: index, x: draggedPiece.x! });
       }
       break;
     }
@@ -78,12 +78,12 @@ export const rookMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
     let tile = board[draggedPiece.y!][index];
 
     if (!tile.piece) {
-      availableMoves.push(tile);
+      availableMoves.push({ y: draggedPiece.y!, x: index });
     }
 
     if (tile.piece) {
       if (tile.piece?.color !== draggedPiece.color) {
-        availableMoves.push(tile);
+        availableMoves.push({ y: draggedPiece.y!, x: index });
       }
       break;
     }
@@ -93,12 +93,12 @@ export const rookMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
     let tile = board[draggedPiece.y!][index];
 
     if (!tile.piece) {
-      availableMoves.push(tile);
+      availableMoves.push({ y: draggedPiece.y!, x: index });
     }
 
     if (tile.piece) {
       if (tile.piece?.color !== draggedPiece.color) {
-        availableMoves.push(tile);
+        availableMoves.push({ y: draggedPiece.y!, x: index });
       }
       break;
     }
