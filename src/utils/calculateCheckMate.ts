@@ -1,85 +1,106 @@
 import { Piece, Tile } from "../types";
 import { isKingInCheck } from "./isKingInCheck";
-import { bishopMovement, kingMovement, pawnAttacks, pawnMovement, rookMovement } from "./PieceMovementUtils";
+import { bishopMovement, kingMovement, knightMovement, pawnMovement, rookMovement } from "./PieceMovementUtils";
 
 export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string) => {
   let checkmate = true;
+  let opponentColor = playerTurn === "white" ? "black" : "white";
+  if (isKingInCheck(board, playerTurn === "white" ? "black" : "white")) {
+    board.forEach((row, y) => {
+      row.forEach((tile, x) => {
+        const newPiece: Piece = {
+          ...tile.piece!,
+          x: x,
+          y: y,
+        };
 
-  let kingPiece: Piece;
-
-  board.forEach((row, y) => {
-    return row.find((tile, x) => {
-      const newPiece: Piece = {
-        ...tile.piece!,
-        x: x,
-        y: y,
-      };
-
-      if (tile.piece && tile.piece.color !== playerTurn) {
-        switch (tile.piece.name) {
-          case "king":
-            kingPiece = { ...tile.piece, x: x, y: y };
-            break;
-
-          case "pawn":
-            pawnMovement(newPiece, board).forEach((test) => {
-              let newBoard = board.map((a) => {
-                return a.map((b) => {
-                  return { ...b };
+        if (tile.piece && tile.piece.color !== playerTurn) {
+          switch (tile.piece.name) {
+            case "pawn":
+              pawnMovement(newPiece, board).forEach((test) => {
+                const newBoard = board.map((a) => {
+                  return a.map((b) => {
+                    return { ...b };
+                  });
                 });
+                newBoard[test.y][test.x].piece = { name: "pawn", color: opponentColor };
+                if (!isKingInCheck(newBoard, opponentColor)) {
+                  checkmate = false;
+                  debugger;
+                }
               });
 
-              newBoard[test.y][test.x].piece = { name: "pawn", color: playerTurn };
-              if (!isKingInCheck(newBoard, playerTurn)) {
-                checkmate = false;
-              }
-            });
+              break;
 
-            break;
-
-          case "bishop": {
-            bishopMovement(newPiece, board).forEach((test) => {
-              let newBoard = board.map((a) => {
-                return a.map((b) => {
-                  return { ...b };
+            case "knight": {
+              knightMovement(newPiece, board).forEach((test) => {
+                const newBoard = board.map((a) => {
+                  return a.map((b) => {
+                    return { ...b };
+                  });
                 });
+                newBoard[test.y][test.x].piece = { name: "knight", color: opponentColor };
+                if (!isKingInCheck(newBoard, opponentColor)) {
+                  checkmate = false;
+                  debugger;
+                }
               });
+              break;
+            }
 
-              newBoard[test.y][test.x].piece = { name: "bishop", color: playerTurn };
-              if (!isKingInCheck(newBoard, playerTurn)) {
+            case "bishop": {
+              bishopMovement(newPiece, board).forEach((test) => {
+                const newBoard = board.map((a) => {
+                  return a.map((b) => {
+                    return { ...b };
+                  });
+                });
+                newBoard[test.y][test.x].piece = { name: "bishop", color: opponentColor };
+                if (!isKingInCheck(newBoard, opponentColor)) {
+                  checkmate = false;
+                  debugger;
+                }
+              });
+              break;
+            }
+            case "rook": {
+              rookMovement(newPiece, board).forEach((test) => {
+                const newBoard = board.map((a) => {
+                  return a.map((b) => {
+                    return { ...b };
+                  });
+                });
+
+                newBoard[test.y][test.x].piece = { name: "rook", color: opponentColor };
+                if (!isKingInCheck(newBoard, opponentColor)) {
+                  checkmate = false;
+                  debugger;
+                }
+              });
+              break;
+            }
+            case "king":
+              if (kingMovement(tile.piece!, board).length !== 0) {
+                debugger;
+
                 checkmate = false;
               }
-            });
-            break;
+
+              break;
+
+            default:
+              break;
           }
-          case "rook": {
-            rookMovement(newPiece, board).forEach((test) => {
-              let newBoard = board.map((a) => {
-                return a.map((b) => {
-                  return { ...b };
-                });
-              });
-
-              newBoard[test.y][test.x].piece = { name: "rook", color: playerTurn };
-              if (!isKingInCheck(newBoard, playerTurn)) {
-                checkmate = false;
-              }
-            });
-            break;
-          }
-
-          default:
-            break;
         }
-      }
+      });
     });
-  });
 
-  if (isKingInCheck(board, playerTurn)) {
-    console.log("CHECK", checkmate);
+    if (isKingInCheck(board, opponentColor)) {
+      console.log("CHECK", checkmate);
 
-    if (kingMovement(kingPiece!, board).length === 0) {
-      console.log("CHECK MATE", checkmate);
+      if (checkmate) {
+        alert("CHECK MATE");
+      }
     }
   }
 };

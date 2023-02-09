@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
 import { Piece, Tile } from "../../types";
 import { calculateCheckMate } from "../../utils/calculateCheckMate";
-import {
-  bishopMovement,
-  isValidKingMove,
-  isValidMove,
-  kingMovement,
-  knightMovement,
-  pawnMovement,
-  rookMovement,
-} from "../../utils/PieceMovementUtils";
+import { bishopMovement, isValidMove, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import "./ChessBoard.scss";
 
@@ -142,47 +134,51 @@ function ChessBoard() {
     });
 
     if (draggedPiece && draggedPiece.color === playerTurn) {
-      if (draggedPiece.name === "pawn" && isValidMove(draggedPiece, newBoard)) {
+      if (draggedPiece.name === "pawn") {
         pawnMovement(draggedPiece, newBoard).forEach((tile) => {
-          newBoard[tile.y][tile.x].moveable = true;
-        });
-      }
-
-      if (draggedPiece.name === "rook") {
-        rookMovement(draggedPiece, newBoard).forEach((tile) => {
-          if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+          if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
             newBoard[tile.y][tile.x].moveable = true;
           }
         });
       }
 
-      if (draggedPiece.name === "knight" && isValidMove(draggedPiece, newBoard)) {
+      if (draggedPiece.name === "rook") {
+        rookMovement(draggedPiece, newBoard).forEach((tile) => {
+          if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+            newBoard[tile.y][tile.x].moveable = true;
+          }
+        });
+      }
+
+      if (draggedPiece.name === "knight") {
         knightMovement(draggedPiece, newBoard).forEach((tile) => {
-          tile.moveable = true;
+          if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+            newBoard[tile.y][tile.x].moveable = true;
+          }
         });
       }
 
       if (draggedPiece.name === "bishop") {
         bishopMovement(draggedPiece, newBoard).forEach((tile) => {
-          if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+          if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
             newBoard[tile.y][tile.x].moveable = true;
           }
         });
       }
       if (draggedPiece.name === "queen") {
         rookMovement(draggedPiece, newBoard).forEach((tile) => {
-          if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+          if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
             newBoard[tile.y][tile.x].moveable = true;
           }
         });
         bishopMovement(draggedPiece, newBoard).forEach((tile) => {
-          if (isValidKingMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+          if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
             newBoard[tile.y][tile.x].moveable = true;
           }
         });
       }
 
-      if (draggedPiece.name === "king" && isValidKingMove(draggedPiece, newBoard, draggedPiece.x!, draggedPiece.y!)) {
+      if (draggedPiece.name === "king" && isValidMove(draggedPiece, newBoard, draggedPiece.x!, draggedPiece.y!)) {
         kingMovement(draggedPiece, newBoard).forEach((tile) => {
           tile.moveable = true;
         });

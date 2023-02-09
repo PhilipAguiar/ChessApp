@@ -42,7 +42,7 @@ export const isKingInCheck = (newBoard: Array<Array<Tile>>, playersTurn: string)
 
           case "knight":
             knightMovement(newPiece, newBoard).forEach((tile) => {
-              if (tile.piece?.name === "king") {
+              if (newBoard[tile.y][tile.x].piece?.name === "king") {
                 output = true;
               }
             });
