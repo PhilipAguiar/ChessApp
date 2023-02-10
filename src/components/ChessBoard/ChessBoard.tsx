@@ -1,11 +1,23 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { DarkModeContext } from "../../contexts/DarkModeContext";
 import { Piece, Tile } from "../../types";
 import { calculateCheckMate } from "../../utils/calculateCheckMate";
 import { bishopMovement, isValidMove, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
+import UserCard from "../UserCard/UserCard";
 import "./ChessBoard.scss";
 
-function ChessBoard() {
+type Props = {
+  playerOneScore: Array<string>;
+  playerTwoScore: Array<string>;
+
+  setPlayerOneScore: Function;
+  setPlayerTwoScore: Function;
+};
+
+function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlayerTwoScore }: Props) {
+  const { darkMode, toggleMode } = useContext(DarkModeContext);
+
   const [board, setBoard] = useState<Array<Array<Tile>>>([
     [
       { piece: { color: "black", name: "rook" }, moveable: false },
@@ -107,12 +119,24 @@ function ChessBoard() {
 
       if (!(draggedPiece.x === x && draggedPiece?.y === y)) {
         if (newBoard[y][x].moveable) {
+          if (newBoard[y][x].piece?.name) {
+            if (playerTurn === "white") {
+              let newPlayerOneScore = [...playerOneScore];
+              newPlayerOneScore.push(newBoard[y][x].piece!.name);
+              setPlayerOneScore(newPlayerOneScore);
+            }
+            if (playerTurn === "black") {
+              let newPlayerTwoScore = [...playerTwoScore];
+              newPlayerTwoScore.push(newBoard[y][x].piece!.name);
+              setPlayerTwoScore(newPlayerTwoScore);
+            }
+          }
           newBoard[y][x] = board[draggedPiece!.y!][draggedPiece!.x!];
           newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false };
-        }
-        calculateCheckMate(newBoard, playerTurn);
+          calculateCheckMate(newBoard, playerTurn);
 
-        setPlayerTurn((prevValue) => (prevValue === "white" ? "black" : "white"));
+          setPlayerTurn((prevValue) => (prevValue === "white" ? "black" : "white"));
+        }
       }
 
       newBoard.forEach((row) => {
@@ -195,7 +219,7 @@ function ChessBoard() {
   }, [draggedPiece]);
 
   return (
-    <div className="board">
+    <div className={`board`}>
       {board &&
         board.map((row, i) => {
           return row.map((tile, j) => {
@@ -205,6 +229,7 @@ function ChessBoard() {
                   key={`${i}${j}`}
                   coordinates={{ x: j, y: i }}
                   tile={tile}
+                  draggedPiece={draggedPiece}
                   updateDraggedPiece={updateDraggedPiece}
                   handleDrop={handleDrop}
                   alternate
@@ -212,7 +237,14 @@ function ChessBoard() {
               );
             }
             return (
-              <BoardTile key={`${i}${j}`} coordinates={{ x: j, y: i }} tile={tile} updateDraggedPiece={updateDraggedPiece} handleDrop={handleDrop} />
+              <BoardTile
+                key={`${i}${j}`}
+                coordinates={{ x: j, y: i }}
+                tile={tile}
+                updateDraggedPiece={updateDraggedPiece}
+                handleDrop={handleDrop}
+                draggedPiece={draggedPiece}
+              />
             );
           });
         })}

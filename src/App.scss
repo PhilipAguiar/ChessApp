@@ -1,0 +1,13 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  transition: background-color 1s, color 1s;
+  &--dark {
+    background-color: rgb(63, 63, 63);
+    color: white;
+  }
+}

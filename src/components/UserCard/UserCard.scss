@@ -1,0 +1,31 @@
+@use "../../styles/partials/mixins" as *;
+
+.user-card {
+  display: flex;
+  align-items: center;
+  width: 80vw;
+  min-height: 2rem;
+  &--alternate {
+    padding-bottom: 0;
+
+    justify-content: flex-end;
+  }
+
+  @include tablet {
+    width: 80vh;
+  }
+
+  &__scoreboard {
+    display: flex;
+    align-items: center;
+    width: 70%;
+    height: 100%;
+    margin-left: 2rem;
+    &--alternate {
+      justify-content: flex-end;
+      margin-left: 0;
+
+      margin-right: 2rem;
+    }
+  }
+}

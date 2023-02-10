@@ -1,3 +1,5 @@
+@use "../../styles/partials/mixins" as *;
+
 .tile {
   display: flex;
   flex-direction: column;
@@ -5,16 +7,33 @@
   align-items: center;
   width: 12.5%;
   height: 12.5%;
-  background-color: black;
-  color: white;
+  color: black;
+  transition: background-color 0.3s, color 0.3s;
 
-  &--alternate {
-    background-color: white;
-    color: black;
+  &--default {
+    background-color: green;
+    &--alternate {
+      background-color: lightgoldenrodyellow;
+    }
+  }
+
+  &--red {
+    background-color: red;
+    &--alternate {
+      background-color: rgb(250, 200, 200);
+    }
   }
 
   &--moveable {
     background-color: yellow;
     color: black;
+    transition: background-color 0s, color 0s;
+  }
+
+  &__piece {
+    font-size: 2rem;
+    @include tablet {
+      font-size: 4rem;
+    }
   }
 }
