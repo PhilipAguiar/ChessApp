@@ -224,22 +224,22 @@ export const bishopMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): 
   return availableMoves;
 };
 
-export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Tile> => {
-  const availableMoves: Array<Tile> = [];
+export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Coordinates> => {
+  const availableMoves: Array<Coordinates> = [];
   let integer = draggedPiece.color === "white" ? -1 : 1;
 
   //vertical movement
   if (draggedPiece.y! + integer >= 0 && draggedPiece.y! + integer <= 7) {
     if (isEnemyColor(board[draggedPiece.y! + integer][draggedPiece.x!].piece!, draggedPiece)) {
       if (isValidMove(draggedPiece, board, draggedPiece.x!, draggedPiece.y! + integer)) {
-        availableMoves.push(board[draggedPiece.y! + integer][draggedPiece.x!]);
+        availableMoves.push({ x: draggedPiece.x!, y: draggedPiece.y! + integer });
       }
     }
   }
   if (draggedPiece.y! - integer >= 0 && draggedPiece.y! - integer <= 7) {
     if (isEnemyColor(board[draggedPiece.y! - integer][draggedPiece.x!].piece!, draggedPiece)) {
       if (isValidMove(draggedPiece, board, draggedPiece.x!, draggedPiece.y! - integer)) {
-        availableMoves.push(board[draggedPiece.y! - integer][draggedPiece.x!]);
+        availableMoves.push({ x: draggedPiece.x!, y: draggedPiece.y! - integer });
       }
     }
   }
@@ -248,14 +248,14 @@ export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
   if (draggedPiece.x! + integer >= 0 && draggedPiece.x! + integer <= 7) {
     if (isEnemyColor(board[draggedPiece.y!][draggedPiece.x! + integer].piece!, draggedPiece)) {
       if (isValidMove(draggedPiece, board, draggedPiece.x! + integer, draggedPiece.y!)) {
-        availableMoves.push(board[draggedPiece.y!][draggedPiece.x! + integer]);
+        availableMoves.push({ x: draggedPiece.x! + integer, y: draggedPiece.y! });
       }
     }
   }
   if (draggedPiece.x! - integer >= 0 && draggedPiece.x! - integer <= 7) {
     if (isEnemyColor(board[draggedPiece.y!][draggedPiece.x! - integer].piece!, draggedPiece)) {
       if (isValidMove(draggedPiece, board, draggedPiece.x! - integer, draggedPiece.y!)) {
-        availableMoves.push(board[draggedPiece.y!][draggedPiece.x! - integer]);
+        availableMoves.push({ x: draggedPiece.x! - integer, y: draggedPiece.y! });
       }
     }
   }
@@ -265,7 +265,7 @@ export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
   if (draggedPiece.x! + integer >= 0 && draggedPiece.x! + integer <= 7 && draggedPiece.y! + integer >= 0 && draggedPiece.y! + integer <= 7) {
     if (isEnemyColor(board[draggedPiece.y! + integer][draggedPiece.x! + integer].piece!, draggedPiece)) {
       if (isValidMove(draggedPiece, board, draggedPiece.x! + integer, draggedPiece.y! + integer)) {
-        availableMoves.push(board[draggedPiece.y! + integer][draggedPiece.x! + integer]);
+        availableMoves.push({ x: draggedPiece.x! + integer, y: draggedPiece.y! + integer });
       }
     }
   }
@@ -273,7 +273,7 @@ export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
   if (draggedPiece.x! - integer >= 0 && draggedPiece.x! - integer <= 7 && draggedPiece.y! + integer >= 0 && draggedPiece.y! + integer <= 7) {
     if (isEnemyColor(board[draggedPiece.y! + integer][draggedPiece.x! - integer].piece!, draggedPiece)) {
       if (isValidMove(draggedPiece, board, draggedPiece.x! - integer, draggedPiece.y! + integer)) {
-        availableMoves.push(board[draggedPiece.y! + integer][draggedPiece.x! - integer]);
+        availableMoves.push({ x: draggedPiece.x! - integer, y: draggedPiece.y! + integer });
       }
     }
   }
@@ -281,7 +281,7 @@ export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
   if (draggedPiece.x! - integer >= 0 && draggedPiece.x! - integer <= 7 && draggedPiece.y! - integer >= 0 && draggedPiece.y! - integer <= 7) {
     if (isEnemyColor(board[draggedPiece.y! - integer][draggedPiece.x! - integer].piece!, draggedPiece)) {
       if (isValidMove(draggedPiece, board, draggedPiece.x! - integer, draggedPiece.y! - integer)) {
-        availableMoves.push(board[draggedPiece.y! - integer][draggedPiece.x! - integer]);
+        availableMoves.push({ x: draggedPiece.x! - integer, y: draggedPiece.y! - integer });
       }
     }
   }
@@ -289,7 +289,7 @@ export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
   if (draggedPiece.x! + integer >= 0 && draggedPiece.x! + integer <= 7 && draggedPiece.y! - integer >= 0 && draggedPiece.y! - integer <= 7) {
     if (isEnemyColor(board[draggedPiece.y! - integer][draggedPiece.x! + integer].piece!, draggedPiece)) {
       if (isValidMove(draggedPiece, board, draggedPiece.x! + integer, draggedPiece.y! - integer)) {
-        availableMoves.push(board[draggedPiece.y! - integer][draggedPiece.x! + integer]);
+        availableMoves.push({ x: draggedPiece.x! + integer, y: draggedPiece.y! - integer });
       }
     }
   }

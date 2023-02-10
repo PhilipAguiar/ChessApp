@@ -204,7 +204,9 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
 
       if (draggedPiece.name === "king" && isValidMove(draggedPiece, newBoard, draggedPiece.x!, draggedPiece.y!)) {
         kingMovement(draggedPiece, newBoard).forEach((tile) => {
-          tile.moveable = true;
+          if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+            newBoard[tile.y][tile.x].moveable = true;
+          }
         });
       }
     }
