@@ -14,10 +14,10 @@ export const getPieceImage = (name: string, color: string, pieceSet: string) => 
       chosenPieceSet = cartoonPieces;
       break;
     case "pixel":
-      chosenPieceSet = cartoonPieces;
+      chosenPieceSet = pixelPieces;
       break;
     default:
-      chosenPieceSet = pixelPieces;
+      chosenPieceSet = defaultPieces;
       break;
   }
 
