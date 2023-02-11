@@ -49,19 +49,22 @@ function PromotionModal({ playerTurn, board, setBoard, setPlayerTurn, setPromoti
 
   return (
     <div className="promotion">
-      {pieces &&
-        pieces.map((piece) => {
-          return (
-            <p
-              style={{ fontSize: "3rem" }}
-              onClick={() => {
-                clickHandler(piece);
-              }}
-            >
-              {getPieceImage(piece, playerTurn, pieceSet)}
-            </p>
-          );
-        })}
+      <h2>Choose a piece to promote in to</h2>
+      <div className="promotion__wrapper">
+        {pieces &&
+          pieces.map((piece) => {
+            return (
+              <img
+                className="promotion__image"
+                style={{ fontSize: "3rem" }}
+                onClick={() => {
+                  clickHandler(piece);
+                }}
+                src={getPieceImage(piece, playerTurn, pieceSet)}
+              />
+            );
+          })}
+      </div>
     </div>
   );
 }

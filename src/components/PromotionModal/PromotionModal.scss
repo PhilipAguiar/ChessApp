@@ -1,9 +1,39 @@
+@use "../../styles/partials/mixins" as *;
+
 .promotion {
   position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   height: 80vh;
   width: 40vw;
-  background-color: green;
+  background-color: darkgray;
+  border: 2px solid rgb(92, 92, 92);
+  text-align: center;
+
+  @include tablet {
+    height: 40vh;
+  }
+
+  &__image {
+    height: 4rem;
+    width: 4rem;
+    margin-top: 1rem;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-around;
+    }
+  }
 }
