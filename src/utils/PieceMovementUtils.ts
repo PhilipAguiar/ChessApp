@@ -300,7 +300,6 @@ export const pawnAttacks = (draggedPiece: Piece, board: Array<Array<Tile>>): Arr
   let integer = draggedPiece.color === "white" ? -1 : 1;
 
   const availableMoves: Array<Coordinates> = [];
-
   if (
     board[draggedPiece.y! + integer][draggedPiece.x! + integer] &&
     board[draggedPiece.y! + integer][draggedPiece.x! + integer].piece &&

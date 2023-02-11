@@ -13,12 +13,8 @@ function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
     <div className={`user-card ${alternate ? "user-card--alternate" : ""}`}>
       {playerTwoScore && (
         <div className="user-card__scoreboard user-card__scoreboard--alternate">
-          {playerTwoScore.map((piece) => {
-            return (
-              <>
-                <p>{getPieceImage(piece, "black")}</p>
-              </>
-            );
+          {playerTwoScore.map((piece, i) => {
+            return <p key={i}>{getPieceImage(piece, "black")}</p>;
           })}
         </div>
       )}
@@ -27,8 +23,8 @@ function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
 
       {playerOneScore && (
         <div className="user-card__scoreboard">
-          {playerOneScore.map((piece) => {
-            return <p>{getPieceImage(piece, "black")}</p>;
+          {playerOneScore.map((piece, i) => {
+            return <p key={i}>{getPieceImage(piece, "black")}</p>;
           })}
         </div>
       )}

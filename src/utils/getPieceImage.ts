@@ -6,7 +6,7 @@ export const getPieceImage = (name: string, color: string) => {
       } else {
         return "♜";
       }
-      break;
+
     case "knight":
       if (color === "white") {
         return "♘";
@@ -14,15 +14,12 @@ export const getPieceImage = (name: string, color: string) => {
         return "♞";
       }
 
-      break;
     case "bishop":
       if (color === "white") {
         return "♗";
       } else {
         return "♝";
       }
-
-      break;
 
     case "queen":
       if (color === "white") {
@@ -31,16 +28,12 @@ export const getPieceImage = (name: string, color: string) => {
         return "♛";
       }
 
-      break;
-
     case "king":
       if (color === "white") {
         return "♔";
       } else {
         return "♚";
       }
-
-      break;
 
     case "pawn":
       if (color === "white") {
@@ -49,9 +42,15 @@ export const getPieceImage = (name: string, color: string) => {
         return "♟";
       }
 
-      break;
-
     default:
       break;
+  }
+};
+
+export const getAllPieces = (color: "black" | "white"): Array<string> => {
+  if (color === "white") {
+    return ["♕", "♖", "♗", "♘"];
+  } else {
+    return ["♛", "♜", "♝", "♞"];
   }
 };

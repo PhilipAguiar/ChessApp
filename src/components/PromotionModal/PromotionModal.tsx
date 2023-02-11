@@ -1,0 +1,77 @@
+import { Tile } from "../../types";
+import { calculateCheckMate } from "../../utils/calculateCheckMate";
+import { getAllPieces, getPieceImage } from "../../utils/getPieceImage";
+import "./PromotionModal.scss";
+
+type Props = {
+  playerTurn: "black" | "white";
+  board: Array<Array<Tile>>;
+  setBoard: Function;
+  setPlayerTurn: Function;
+  setPromotionActive: Function;
+};
+
+function PromotionModal({ playerTurn, board, setBoard, setPlayerTurn, setPromotionActive }: Props) {
+  const pieces = ["queen", "rook", "bishop", "knight"];
+
+  const clickHandler = (piece: string) => {
+    const rowIndex = playerTurn === "white" ? 0 : 7;
+
+    let newBoard = board.map((a) => {
+      return a.map((b) => {
+        return { ...b };
+      });
+    });
+
+    console.log(newBoard[rowIndex]);
+
+    newBoard[rowIndex] = newBoard[rowIndex].map((tile) => {
+      if (tile.piece && tile.piece.name === "pawn") {
+        return {
+          moveable: false,
+          piece: {
+            name: piece,
+            color: playerTurn,
+          },
+        };
+      }
+      return tile;
+    });
+
+    setBoard([...newBoard]);
+    calculateCheckMate(newBoard, playerTurn);
+    setPlayerTurn(playerTurn === "white" ? "black" : "white");
+    setPromotionActive(false);
+  };
+
+  return (
+    <div className="promotion">
+      {pieces &&
+        pieces.map((piece) => {
+          return (
+            <p
+              style={{ fontSize: "3rem" }}
+              onClick={() => {
+                clickHandler(piece);
+              }}
+            >
+              {getPieceImage(piece, playerTurn)}
+            </p>
+          );
+        })}
+      {/* {getAllPieces(playerTurn).map((piece) => {
+        return (
+          <p
+            style={{ fontSize: "3rem" }}
+            onClick={() => {
+              clickHandler(piece);
+            }}
+          >
+            {piece}
+          </p>
+        );
+      })} */}
+    </div>
+  );
+}
+export default PromotionModal;

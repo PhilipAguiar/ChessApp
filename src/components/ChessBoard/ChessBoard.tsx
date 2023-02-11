@@ -4,6 +4,7 @@ import { Piece, Tile } from "../../types";
 import { calculateCheckMate } from "../../utils/calculateCheckMate";
 import { bishopMovement, isValidMove, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
+import PromotionModal from "../PromotionModal/PromotionModal";
 import UserCard from "../UserCard/UserCard";
 import "./ChessBoard.scss";
 
@@ -16,8 +17,6 @@ type Props = {
 };
 
 function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlayerTwoScore }: Props) {
-  const { darkMode, toggleMode } = useContext(DarkModeContext);
-
   const [board, setBoard] = useState<Array<Array<Tile>>>([
     [
       { piece: { color: "black", name: "rook" }, moveable: false },
@@ -101,9 +100,9 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
     ],
   ]);
 
-  const [playerTurn, setPlayerTurn] = useState<string>("white");
-
+  const [playerTurn, setPlayerTurn] = useState<"white" | "black">("white");
   const [draggedPiece, setDraggedPiece] = useState<Piece | null>(null);
+  const [promotionActive, setPromotionActive] = useState<boolean>(false);
 
   const updateDraggedPiece = (updateDraggedPiece: Piece) => {
     setDraggedPiece(updateDraggedPiece);
@@ -131,11 +130,19 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
               setPlayerTwoScore(newPlayerTwoScore);
             }
           }
+          //
+
           newBoard[y][x] = board[draggedPiece!.y!][draggedPiece!.x!];
           newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false };
-          calculateCheckMate(newBoard, playerTurn);
 
-          setPlayerTurn((prevValue) => (prevValue === "white" ? "black" : "white"));
+          if (newBoard[y][x].piece!.name === "pawn" && (y === 7 || y === 0)) {
+            setPromotionActive(true);
+            // newBoard[y][x].piece!.name = promotionPiece!;
+            // setPromotionPiece(undefined);
+          } else {
+            calculateCheckMate(newBoard, playerTurn);
+            setPlayerTurn((prevValue) => (prevValue === "white" ? "black" : "white"));
+          }
         }
       }
 
@@ -222,6 +229,15 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
 
   return (
     <div className={`board`}>
+      {promotionActive && (
+        <PromotionModal
+          playerTurn={playerTurn}
+          board={board}
+          setBoard={setBoard}
+          setPlayerTurn={setPlayerTurn}
+          setPromotionActive={setPromotionActive}
+        />
+      )}
       {board &&
         board.map((row, i) => {
           return row.map((tile, j) => {

@@ -26,7 +26,6 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                 newBoard[test.y][test.x].piece = { name: "pawn", color: opponentColor };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
-                  debugger;
                 }
               });
 
@@ -42,7 +41,6 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                 newBoard[test.y][test.x].piece = { name: "knight", color: opponentColor };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
-                  debugger;
                 }
               });
               break;
@@ -58,7 +56,6 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                 newBoard[test.y][test.x].piece = { name: "bishop", color: opponentColor };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
-                  debugger;
                 }
               });
               break;
@@ -74,7 +71,6 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                 newBoard[test.y][test.x].piece = { name: "rook", color: opponentColor };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
-                  debugger;
                 }
               });
               break;
@@ -90,7 +86,6 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                 newBoard[test.y][test.x].piece = { name: "king", color: opponentColor };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
-                  debugger;
                 }
               });
 
