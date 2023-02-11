@@ -238,6 +238,7 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
           setPromotionActive={setPromotionActive}
         />
       )}
+
       {board &&
         board.map((row, i) => {
           return row.map((tile, j) => {

@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { getPieceImage } from "../../utils/getPieceImage";
 import "./UserCard.scss";
 
@@ -9,12 +11,20 @@ type Props = {
 };
 
 function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
+  const { pieceSet } = useContext(ThemeContext);
+
   return (
     <div className={`user-card ${alternate ? "user-card--alternate" : ""}`}>
       {playerTwoScore && (
         <div className="user-card__scoreboard user-card__scoreboard--alternate">
           {playerTwoScore.map((piece, i) => {
-            return <p key={i}>{getPieceImage(piece, "black")}</p>;
+            return (
+              <img
+                className={`user-card__piece ${pieceSet === "cartoon" ? "user-card__piece--large" : ""}`}
+                key={i}
+                src={getPieceImage(piece, "white", pieceSet)}
+              />
+            );
           })}
         </div>
       )}
@@ -24,7 +34,13 @@ function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
       {playerOneScore && (
         <div className="user-card__scoreboard">
           {playerOneScore.map((piece, i) => {
-            return <p key={i}>{getPieceImage(piece, "black")}</p>;
+            return (
+              <img
+                className={`user-card__piece ${pieceSet === "cartoon" ? "user-card__piece--large" : ""}`}
+                key={i}
+                src={getPieceImage(piece, "black", pieceSet)}
+              />
+            );
           })}
         </div>
       )}

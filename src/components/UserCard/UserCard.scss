@@ -4,11 +4,25 @@
   display: flex;
   align-items: center;
   width: 80vw;
+  box-sizing: border-box;
   min-height: 2rem;
-  &--alternate {
-    padding-bottom: 0;
+  background-color: white;
+  color: black;
+  border: 6px solid black;
+  border-top: 0;
+  padding-left: 1rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 
+  &--alternate {
+    border-bottom: 0;
+    border-top: 6px solid black;
+
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 1rem;
     justify-content: flex-end;
+    background-color: rgb(83, 82, 82);
+    color: white;
   }
 
   @include tablet {
@@ -26,6 +40,14 @@
       margin-left: 0;
 
       margin-right: 2rem;
+    }
+  }
+
+  &__piece {
+    height: 1rem;
+
+    &--large {
+      height: 2rem;
     }
   }
 }

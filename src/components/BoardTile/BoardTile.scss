@@ -2,6 +2,7 @@
 
 .tile {
   display: flex;
+  box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -31,9 +32,10 @@
   }
 
   &__piece {
-    font-size: 2rem;
-    @include tablet {
-      font-size: 4rem;
+    height: 60%;
+
+    &--large {
+      height: 100%;
     }
   }
 }

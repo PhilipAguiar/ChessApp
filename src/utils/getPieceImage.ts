@@ -1,56 +1,66 @@
-export const getPieceImage = (name: string, color: string) => {
+import defaultPieces from "../piece-sets/defaultPieces";
+import defaultPiecesShadow from "../piece-sets/defaultPiecesShadows";
+import cartoonPieces from "../piece-sets/cartoonPieces";
+
+export const getPieceImage = (name: string, color: string, pieceSet: string) => {
+  let chosenPieceSet;
+
+  switch (pieceSet) {
+    case "default-shadows":
+      chosenPieceSet = defaultPiecesShadow;
+      break;
+    case "cartoon":
+      chosenPieceSet = cartoonPieces;
+      break;
+
+    default:
+      chosenPieceSet = defaultPieces;
+      break;
+  }
+
   switch (name) {
-    case "rook":
+    case "king":
       if (color === "white") {
-        return "♖";
+        return chosenPieceSet.king.white;
       } else {
-        return "♜";
-      }
-
-    case "knight":
-      if (color === "white") {
-        return "♘";
-      } else {
-        return "♞";
-      }
-
-    case "bishop":
-      if (color === "white") {
-        return "♗";
-      } else {
-        return "♝";
+        return chosenPieceSet.king.black;
       }
 
     case "queen":
       if (color === "white") {
-        return "♕";
+        return chosenPieceSet.queen.white;
       } else {
-        return "♛";
+        return chosenPieceSet.queen.black;
       }
 
-    case "king":
+    case "rook":
       if (color === "white") {
-        return "♔";
+        return chosenPieceSet.rook.white;
       } else {
-        return "♚";
+        return chosenPieceSet.rook.black;
       }
 
+    case "knight":
+      if (color === "white") {
+        return chosenPieceSet.knight.white;
+      } else {
+        return chosenPieceSet.knight.black;
+      }
+
+    case "bishop":
+      if (color === "white") {
+        return chosenPieceSet.bishop.white;
+      } else {
+        return chosenPieceSet.bishop.black;
+      }
     case "pawn":
       if (color === "white") {
-        return "♙";
+        return chosenPieceSet.pawn.white;
       } else {
-        return "♟";
+        return chosenPieceSet.pawn.black;
       }
 
     default:
       break;
-  }
-};
-
-export const getAllPieces = (color: "black" | "white"): Array<string> => {
-  if (color === "white") {
-    return ["♕", "♖", "♗", "♘"];
-  } else {
-    return ["♛", "♜", "♝", "♞"];
   }
 };

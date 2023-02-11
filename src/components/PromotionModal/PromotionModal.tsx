@@ -1,6 +1,8 @@
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { Tile } from "../../types";
 import { calculateCheckMate } from "../../utils/calculateCheckMate";
-import { getAllPieces, getPieceImage } from "../../utils/getPieceImage";
+import { getPieceImage } from "../../utils/getPieceImage";
 import "./PromotionModal.scss";
 
 type Props = {
@@ -13,6 +15,7 @@ type Props = {
 
 function PromotionModal({ playerTurn, board, setBoard, setPlayerTurn, setPromotionActive }: Props) {
   const pieces = ["queen", "rook", "bishop", "knight"];
+  const { pieceSet } = useContext(ThemeContext);
 
   const clickHandler = (piece: string) => {
     const rowIndex = playerTurn === "white" ? 0 : 7;
@@ -55,22 +58,10 @@ function PromotionModal({ playerTurn, board, setBoard, setPlayerTurn, setPromoti
                 clickHandler(piece);
               }}
             >
-              {getPieceImage(piece, playerTurn)}
+              {getPieceImage(piece, playerTurn, pieceSet)}
             </p>
           );
         })}
-      {/* {getAllPieces(playerTurn).map((piece) => {
-        return (
-          <p
-            style={{ fontSize: "3rem" }}
-            onClick={() => {
-              clickHandler(piece);
-            }}
-          >
-            {piece}
-          </p>
-        );
-      })} */}
     </div>
   );
 }
