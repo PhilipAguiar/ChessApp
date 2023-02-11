@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { getPieceImage } from "../../utils/getPieceImage";
 import "./UserCard.scss";
@@ -12,6 +12,13 @@ type Props = {
 
 function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
   const { pieceSet } = useContext(ThemeContext);
+  const [largePieces, setLargePieces] = useState<boolean>();
+
+  useEffect(() => {
+    if (pieceSet === "cartoon" || "pixel") {
+      setLargePieces(true);
+    }
+  }, [pieceSet]);
 
   return (
     <div className={`user-card ${alternate ? "user-card--alternate" : ""}`}>
@@ -20,7 +27,7 @@ function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
           {playerTwoScore.map((piece, i) => {
             return (
               <img
-                className={`user-card__piece ${pieceSet === "cartoon" ? "user-card__piece--large" : ""}`}
+                className={`user-card__piece ${largePieces ? "user-card__piece--large" : ""}`}
                 key={i}
                 src={getPieceImage(piece, "white", pieceSet)}
               />
@@ -36,7 +43,7 @@ function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
           {playerOneScore.map((piece, i) => {
             return (
               <img
-                className={`user-card__piece ${pieceSet === "cartoon" ? "user-card__piece--large" : ""}`}
+                className={`user-card__piece ${largePieces ? "user-card__piece--large" : ""}`}
                 key={i}
                 src={getPieceImage(piece, "black", pieceSet)}
               />

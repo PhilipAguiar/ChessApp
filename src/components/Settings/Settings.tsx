@@ -50,6 +50,7 @@ function Settings() {
             <option value="default">Default</option>
             <option value="default-shadows">Default w/Shadows</option>
             <option value="cartoon">Cartoon</option>
+            <option value="pixel">Pixel</option>
           </select>
         </div>
       </div>

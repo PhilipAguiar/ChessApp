@@ -1,6 +1,7 @@
 import defaultPieces from "../piece-sets/defaultPieces";
 import defaultPiecesShadow from "../piece-sets/defaultPiecesShadows";
 import cartoonPieces from "../piece-sets/cartoonPieces";
+import pixelPieces from "../piece-sets/pixelPieces";
 
 export const getPieceImage = (name: string, color: string, pieceSet: string) => {
   let chosenPieceSet;
@@ -12,9 +13,11 @@ export const getPieceImage = (name: string, color: string, pieceSet: string) => 
     case "cartoon":
       chosenPieceSet = cartoonPieces;
       break;
-
+    case "pixel":
+      chosenPieceSet = cartoonPieces;
+      break;
     default:
-      chosenPieceSet = defaultPieces;
+      chosenPieceSet = pixelPieces;
       break;
   }
 
