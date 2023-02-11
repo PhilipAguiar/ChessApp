@@ -20,7 +20,8 @@ function BoardTile({ coordinates, alternate, tile, updateDraggedPiece, handleDro
 
   const { piece } = tile!;
   const [pieceImg, setPieceImg] = useState<string>();
-  const [largePieces, setLargePieces] = useState<boolean>();
+  const [largePieces, setLargePieces] = useState<boolean>(false);
+
   useEffect(() => {
     if (piece) {
       setPieceImg(getPieceImage(piece.name, piece.color, pieceSet));
@@ -30,8 +31,10 @@ function BoardTile({ coordinates, alternate, tile, updateDraggedPiece, handleDro
   }, [piece, pieceSet]);
 
   useEffect(() => {
-    if (pieceSet === "cartoon" || "pixel") {
+    if (pieceSet === "cartoon" || pieceSet === "pixel") {
       setLargePieces(true);
+    } else {
+      setLargePieces(false);
     }
   }, [pieceSet]);
 
