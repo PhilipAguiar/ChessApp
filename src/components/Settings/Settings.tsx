@@ -3,13 +3,26 @@ import { useContext } from "react";
 import { DarkModeContext } from "../../contexts/DarkModeContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
-function Settings() {
+type Props = {
+  setFlipBoard: Function;
+};
+
+function Settings({ setFlipBoard }: Props) {
   const { themeSwitcher, pieceSwitcher } = useContext(ThemeContext);
   const { darkMode, toggleMode } = useContext(DarkModeContext);
 
   return (
     <div className="settings">
       <h1>Settings:</h1>
+
+      <button
+        onClick={() => {
+          setFlipBoard((prevValue: boolean) => !prevValue);
+        }}
+      >
+        Flip Board
+      </button>
+
       <div className="settings__wrapper">
         <div className="settings__button-container">
           <p className="settings__text">Dark Mode: </p>

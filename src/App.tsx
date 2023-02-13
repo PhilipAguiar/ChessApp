@@ -12,6 +12,8 @@ function App() {
   const [playerOneScore, setPlayerOneScore] = useState<Array<string>>([]);
   const [playerTwoScore, setPlayerTwoScore] = useState<Array<string>>([]);
 
+  const [flipBoard, setFlipBoard] = useState<boolean>(false);
+
   return (
     <div className={`App ${darkMode ? "App--dark" : ""}`}>
       <UserCard name="Player 2" playerTwoScore={playerTwoScore} alternate />
@@ -20,9 +22,11 @@ function App() {
         playerTwoScore={playerTwoScore}
         setPlayerOneScore={setPlayerOneScore}
         setPlayerTwoScore={setPlayerTwoScore}
+        flipBoard={flipBoard}
+        setFlipBoard={setFlipBoard}
       />
       <UserCard name="Player 1" playerOneScore={playerOneScore} />
-      <Settings />
+      <Settings setFlipBoard={setFlipBoard} />
     </div>
   );
 }

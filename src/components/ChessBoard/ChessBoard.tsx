@@ -11,12 +11,13 @@ import "./ChessBoard.scss";
 type Props = {
   playerOneScore: Array<string>;
   playerTwoScore: Array<string>;
-
   setPlayerOneScore: Function;
   setPlayerTwoScore: Function;
+  setFlipBoard: Function;
+  flipBoard: boolean;
 };
 
-function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlayerTwoScore }: Props) {
+function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlayerTwoScore, flipBoard, setFlipBoard }: Props) {
   const [board, setBoard] = useState<Array<Array<Tile>>>([
     [
       { piece: { color: "black", name: "rook" }, moveable: false },
@@ -227,8 +228,18 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
     }
   }, [draggedPiece]);
 
+  useEffect(() => {
+    if (playerTurn === "white") {
+      setFlipBoard(false);
+    }
+
+    if (playerTurn === "black") {
+      setFlipBoard(true);
+    }
+  }, [playerTurn]);
+
   return (
-    <div className={`board`}>
+    <div className={`board ${flipBoard ? "board--flipped" : ""}`}>
       {promotionActive && (
         <PromotionModal
           playerTurn={playerTurn}
