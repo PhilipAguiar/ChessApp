@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { DarkModeContext } from "../../contexts/DarkModeContext";
 import { Piece, Tile } from "../../types";
 import { calculateCheckMate } from "../../utils/calculateCheckMate";
+import { handleCastling } from "../../utils/handleCastleing";
 import { bishopMovement, isValidMove, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import PromotionModal from "../PromotionModal/PromotionModal";
@@ -20,14 +21,14 @@ type Props = {
 function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlayerTwoScore, flipBoard, setFlipBoard }: Props) {
   const [board, setBoard] = useState<Array<Array<Tile>>>([
     [
-      { piece: { color: "black", name: "rook" }, moveable: false },
+      { piece: { color: "black", name: "rook", hasMoved: false }, moveable: false },
       { piece: { color: "black", name: "knight" }, moveable: false },
       { piece: { color: "black", name: "bishop" }, moveable: false },
       { piece: { color: "black", name: "queen" }, moveable: false },
-      { piece: { color: "black", name: "king" }, moveable: false },
+      { piece: { color: "black", name: "king", hasMoved: false }, moveable: false },
       { piece: { color: "black", name: "bishop" }, moveable: false },
       { piece: { color: "black", name: "knight" }, moveable: false },
-      { piece: { color: "black", name: "rook" }, moveable: false },
+      { piece: { color: "black", name: "rook", hasMoved: false }, moveable: false },
     ],
     [
       { piece: { color: "black", name: "pawn" }, moveable: false },
@@ -90,20 +91,22 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
       { piece: { color: "white", name: "pawn" }, moveable: false },
     ],
     [
-      { piece: { color: "white", name: "rook" }, moveable: false },
+      { piece: { color: "white", name: "rook", hasMoved: false }, moveable: false },
       { piece: { color: "white", name: "knight" }, moveable: false },
       { piece: { color: "white", name: "bishop" }, moveable: false },
       { piece: { color: "white", name: "queen" }, moveable: false },
-      { piece: { color: "white", name: "king" }, moveable: false },
+      { piece: { color: "white", name: "king", hasMoved: false }, moveable: false },
       { piece: { color: "white", name: "bishop" }, moveable: false },
       { piece: { color: "white", name: "knight" }, moveable: false },
-      { piece: { color: "white", name: "rook" }, moveable: false },
+      { piece: { color: "white", name: "rook", hasMoved: false }, moveable: false },
     ],
   ]);
 
   const [playerTurn, setPlayerTurn] = useState<"white" | "black">("white");
   const [draggedPiece, setDraggedPiece] = useState<Piece | null>(null);
   const [promotionActive, setPromotionActive] = useState<boolean>(false);
+  const [canWhiteCastle, setCanWhiteCastle] = useState<Array<boolean>>([true, true]);
+  const [canBlackCastle, setCanBlackCastle] = useState<Array<boolean>>([true, true]);
 
   const updateDraggedPiece = (updateDraggedPiece: Piece) => {
     setDraggedPiece(updateDraggedPiece);
@@ -131,7 +134,26 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
               setPlayerTwoScore(newPlayerTwoScore);
             }
           }
-          //
+
+          if (draggedPiece.name === "rook") {
+            if (playerTurn === "white") {
+              handleCastling(draggedPiece, newBoard, canWhiteCastle, setCanWhiteCastle);
+            }
+
+            if (playerTurn === "black") {
+              handleCastling(draggedPiece, newBoard, canBlackCastle, setCanBlackCastle);
+            }
+          }
+
+          if (draggedPiece.name === "king") {
+            if (playerTurn === "white") {
+              handleCastling(draggedPiece, newBoard, canWhiteCastle, setCanWhiteCastle, x, y);
+            }
+
+            if (playerTurn === "black") {
+              handleCastling(draggedPiece, newBoard, canBlackCastle, setCanBlackCastle, x, y);
+            }
+          }
 
           newBoard[y][x] = board[draggedPiece!.y!][draggedPiece!.x!];
           newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false };
@@ -211,11 +233,20 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
       }
 
       if (draggedPiece.name === "king" && isValidMove(draggedPiece, newBoard, draggedPiece.x!, draggedPiece.y!)) {
-        kingMovement(draggedPiece, newBoard).forEach((tile) => {
-          if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
-            newBoard[tile.y][tile.x].moveable = true;
-          }
-        });
+        if (playerTurn === "white") {
+          kingMovement(draggedPiece, newBoard, canWhiteCastle).forEach((tile) => {
+            if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+              newBoard[tile.y][tile.x].moveable = true;
+            }
+          });
+        }
+        if (playerTurn === "black") {
+          kingMovement(draggedPiece, newBoard, canBlackCastle).forEach((tile) => {
+            if (isValidMove(draggedPiece, newBoard, tile.x!, tile.y!)) {
+              newBoard[tile.y][tile.x].moveable = true;
+            }
+          });
+        }
       }
     }
 
@@ -228,15 +259,15 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
     }
   }, [draggedPiece]);
 
-  useEffect(() => {
-    if (playerTurn === "white") {
-      setFlipBoard(false);
-    }
+  // useEffect(() => {
+  //   if (playerTurn === "white") {
+  //     setFlipBoard(false);
+  //   }
 
-    if (playerTurn === "black") {
-      setFlipBoard(true);
-    }
-  }, [playerTurn]);
+  //   if (playerTurn === "black") {
+  //     setFlipBoard(true);
+  //   }
+  // }, [playerTurn]);
 
   return (
     <div className={`board ${flipBoard ? "board--flipped" : ""}`}>

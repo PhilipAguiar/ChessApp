@@ -10,6 +10,7 @@ export type Tile = {
 export type Piece = {
   color: string;
   name: string;
+  hasMoved?: boolean;
   x?: number;
   y?: number;
 };

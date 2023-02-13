@@ -26,8 +26,6 @@ function PromotionModal({ playerTurn, board, setBoard, setPlayerTurn, setPromoti
       });
     });
 
-    console.log(newBoard[rowIndex]);
-
     newBoard[rowIndex] = newBoard[rowIndex].map((tile) => {
       if (tile.piece && tile.piece.name === "pawn") {
         return {

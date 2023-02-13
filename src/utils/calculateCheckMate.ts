@@ -5,6 +5,7 @@ import { bishopMovement, kingMovement, knightMovement, pawnMovement, rookMovemen
 export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string) => {
   let checkmate = true;
   let opponentColor = playerTurn === "white" ? "black" : "white";
+
   if (isKingInCheck(board, opponentColor)) {
     board.forEach((row, y) => {
       row.forEach((tile, x) => {
@@ -69,6 +70,33 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                 });
 
                 newBoard[test.y][test.x].piece = { name: "rook", color: opponentColor };
+                if (!isKingInCheck(newBoard, opponentColor)) {
+                  checkmate = false;
+                }
+              });
+              break;
+            }
+
+            case "queen": {
+              rookMovement(newPiece, board).forEach((test) => {
+                const newBoard = board.map((a) => {
+                  return a.map((b) => {
+                    return { ...b };
+                  });
+                });
+
+                newBoard[test.y][test.x].piece = { name: "rook", color: opponentColor };
+                if (!isKingInCheck(newBoard, opponentColor)) {
+                  checkmate = false;
+                }
+              });
+              bishopMovement(newPiece, board).forEach((test) => {
+                const newBoard = board.map((a) => {
+                  return a.map((b) => {
+                    return { ...b };
+                  });
+                });
+                newBoard[test.y][test.x].piece = { name: "bishop", color: opponentColor };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
                 }

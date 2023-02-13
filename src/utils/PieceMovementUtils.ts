@@ -1,5 +1,5 @@
 import { Coordinates, Piece, Tile } from "../types";
-import { isKingInCheck } from "./isKingInCheck";
+import { isKingInCheck, isTileUnderAttack } from "./isKingInCheck";
 
 const isEnemyColor = (piece1?: Piece, piece2?: Piece): boolean => {
   if (piece1 && piece2) {
@@ -224,7 +224,7 @@ export const bishopMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): 
   return availableMoves;
 };
 
-export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Array<Coordinates> => {
+export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>, canCastle?: Array<boolean>): Array<Coordinates> => {
   const availableMoves: Array<Coordinates> = [];
   let integer = draggedPiece.color === "white" ? -1 : 1;
 
@@ -293,6 +293,33 @@ export const kingMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
       }
     }
   }
+
+  //check if able to castle
+
+  if (canCastle && canCastle[0] === true) {
+    if (
+      !board[draggedPiece.y!][draggedPiece.x! - 1].piece &&
+      !isTileUnderAttack(board, draggedPiece.x! - 1, draggedPiece.y!, draggedPiece.color) &&
+      !board[draggedPiece.y!][draggedPiece.x! - 2].piece &&
+      !isTileUnderAttack(board, draggedPiece.x! - 2, draggedPiece.y!, draggedPiece.color) &&
+      !board[draggedPiece.y!][draggedPiece.x! - 3].piece &&
+      !isTileUnderAttack(board, draggedPiece.x! - 3, draggedPiece.y!, draggedPiece.color)
+    ) {
+      availableMoves.push({ x: draggedPiece.x! - 2, y: draggedPiece.y! });
+    }
+  }
+
+  if (canCastle && canCastle[1] === true) {
+    if (
+      !board[draggedPiece.y!][draggedPiece.x! + 1].piece &&
+      !isTileUnderAttack(board, draggedPiece.x! + 1, draggedPiece.y!, draggedPiece.color) &&
+      !board[draggedPiece.y!][draggedPiece.x! + 2].piece &&
+      !isTileUnderAttack(board, draggedPiece.x! + 2, draggedPiece.y!, draggedPiece.color)
+    ) {
+      availableMoves.push({ x: draggedPiece.x! + 2, y: draggedPiece.y! });
+    }
+  }
+
   return availableMoves;
 };
 
