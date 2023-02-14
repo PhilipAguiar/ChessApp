@@ -1,12 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { DarkModeContext } from "../../contexts/DarkModeContext";
+import { useEffect, useState } from "react";
 import { Piece, Tile } from "../../types";
 import { calculateCheckMate } from "../../utils/calculateCheckMate";
 import { handleCastling } from "../../utils/handleCastleing";
+import { isKingInCheck } from "../../utils/isKingInCheck";
 import { bishopMovement, isValidMove, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import PromotionModal from "../PromotionModal/PromotionModal";
-import UserCard from "../UserCard/UserCard";
 import "./ChessBoard.scss";
 
 type Props = {
@@ -25,7 +24,7 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
       { piece: { color: "black", name: "knight" }, moveable: false },
       { piece: { color: "black", name: "bishop" }, moveable: false },
       { piece: { color: "black", name: "queen" }, moveable: false },
-      { piece: { color: "black", name: "king", hasMoved: false }, moveable: false },
+      { piece: { color: "black", name: "king", inCheck: false, hasMoved: false }, moveable: false },
       { piece: { color: "black", name: "bishop" }, moveable: false },
       { piece: { color: "black", name: "knight" }, moveable: false },
       { piece: { color: "black", name: "rook", hasMoved: false }, moveable: false },
@@ -95,7 +94,7 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
       { piece: { color: "white", name: "knight" }, moveable: false },
       { piece: { color: "white", name: "bishop" }, moveable: false },
       { piece: { color: "white", name: "queen" }, moveable: false },
-      { piece: { color: "white", name: "king", hasMoved: false }, moveable: false },
+      { piece: { color: "white", name: "king", inCheck: false, hasMoved: false }, moveable: false },
       { piece: { color: "white", name: "bishop" }, moveable: false },
       { piece: { color: "white", name: "knight" }, moveable: false },
       { piece: { color: "white", name: "rook", hasMoved: false }, moveable: false },
@@ -293,6 +292,8 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
                   draggedPiece={draggedPiece}
                   updateDraggedPiece={updateDraggedPiece}
                   handleDrop={handleDrop}
+                  board={board}
+                  playerTurn={playerTurn}
                   alternate
                 />
               );
@@ -304,6 +305,8 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
                 tile={tile}
                 updateDraggedPiece={updateDraggedPiece}
                 handleDrop={handleDrop}
+                board={board}
+                playerTurn={playerTurn}
                 draggedPiece={draggedPiece}
               />
             );

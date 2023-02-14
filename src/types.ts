@@ -11,6 +11,7 @@ export type Piece = {
   color: string;
   name: string;
   hasMoved?: boolean;
+  inCheck?: boolean;
   x?: number;
   y?: number;
 };

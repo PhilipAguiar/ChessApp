@@ -1,10 +1,11 @@
 @use "../../styles/partials/mixins" as *;
 
 .settings {
-  width: 80vw;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   @include tablet {
     width: 80vh;
   }

@@ -31,6 +31,10 @@
     transition: background-color 0s, color 0s;
   }
 
+  &--check {
+    background-color: red;
+  }
+
   &__piece {
     height: 60%;
 

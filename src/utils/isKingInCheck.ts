@@ -46,6 +46,7 @@ export const isKingInCheck = (newBoard: Array<Array<Tile>>, kingsColor: string):
                 output = true;
               }
             });
+
             break;
 
           case "queen":
