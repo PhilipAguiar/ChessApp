@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { getPieceImage } from "../../utils/getPieceImage";
+import { getPieceImage } from "../../utils/pieceUtils/getPieceImage";
 import "./UserCard.scss";
 
 type Props = {

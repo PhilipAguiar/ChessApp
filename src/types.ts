@@ -7,6 +7,13 @@ export type Tile = {
   moveable: boolean;
 };
 
+export type Game = {
+  board: Array<Array<Tile>>;
+  playerTurn: "white" | "black";
+  playerName: "string";
+  gameID: "string";
+};
+
 export type Piece = {
   color: string;
   name: string;

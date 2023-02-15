@@ -1,17 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { DarkModeProvider } from "./contexts/DarkModeContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import App from "./App";
+import { FirebaseProvider } from "./contexts/FirebaseContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   // <React.StrictMode>
   <DarkModeProvider>
     <ThemeProvider>
-      <App />
+      <FirebaseProvider>
+        <App />
+      </FirebaseProvider>
     </ThemeProvider>
   </DarkModeProvider>
 

@@ -1,7 +1,7 @@
-import defaultPieces from "../piece-sets/defaultPieces";
-import defaultPiecesShadow from "../piece-sets/defaultPiecesShadows";
-import cartoonPieces from "../piece-sets/cartoonPieces";
-import pixelPieces from "../piece-sets/pixelPieces";
+import defaultPieces from "../../piece-sets/defaultPieces";
+import defaultPiecesShadow from "../../piece-sets/defaultPiecesShadows";
+import cartoonPieces from "../../piece-sets/cartoonPieces";
+import pixelPieces from "../../piece-sets/pixelPieces";
 
 export const getPieceImage = (name: string, color: string, pieceSet: string) => {
   let chosenPieceSet;

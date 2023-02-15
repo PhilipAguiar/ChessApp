@@ -1,4 +1,4 @@
-import { Piece, Tile } from "../types";
+import { Piece, Tile } from "../../types";
 
 export const handleCastling = (
   draggedPiece: Piece,

@@ -1,33 +1,27 @@
-import React, { useContext, useState } from "react";
-import "./App.scss";
-import ChessBoard from "./components/ChessBoard/ChessBoard";
-import Settings from "./components/Settings/Settings";
-import UserCard from "./components/UserCard/UserCard";
-import { DarkModeContext } from "./contexts/DarkModeContext";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Nav from "./components/Nav/Nav";
+import { useAuth } from "./contexts/FirebaseContext";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import ChallengePage from "./pages/ChallengePage/ChallengePage";
+import HomePage from "./pages/HomePage/HomePage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import SignupPage from "./pages/SignupPage/SignupPage";
+import { isAdmin } from "./utils/databaseUtils/databaseUtils";
 
 function App() {
-  const { darkMode } = useContext(DarkModeContext);
-
-  const [playerOneScore, setPlayerOneScore] = useState<Array<string>>([]);
-  const [playerTwoScore, setPlayerTwoScore] = useState<Array<string>>([]);
-
-  const [flipBoard, setFlipBoard] = useState<boolean>(false);
-
+  const { currentUser } = useAuth();
   return (
-    <div className={`App ${darkMode ? "App--dark" : ""}`}>
-      <UserCard name="Player 2" playerTwoScore={playerTwoScore} alternate />
-      <ChessBoard
-        playerOneScore={playerOneScore}
-        playerTwoScore={playerTwoScore}
-        setPlayerOneScore={setPlayerOneScore}
-        setPlayerTwoScore={setPlayerTwoScore}
-        flipBoard={flipBoard}
-        setFlipBoard={setFlipBoard}
-      />
-      <UserCard name="Player 1" playerOneScore={playerOneScore} />
-      <Settings setFlipBoard={setFlipBoard} />
-    </div>
+    <BrowserRouter>
+      <Nav />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/challenge" element={<ChallengePage />} />
+
+        {currentUser && isAdmin(currentUser.uid) && <Route path="/admin" element={<AdminPage />} />}
+      </Routes>
+    </BrowserRouter>
   );
 }
-
 export default App;

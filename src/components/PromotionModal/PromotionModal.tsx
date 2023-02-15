@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { Tile } from "../../types";
-import { calculateCheckMate } from "../../utils/calculateCheckMate";
-import { getPieceImage } from "../../utils/getPieceImage";
+import { calculateCheckMate } from "../../utils/pieceUtils/calculateCheckMate";
+import { getPieceImage } from "../../utils/pieceUtils/getPieceImage";
 import "./PromotionModal.scss";
 
 type Props = {

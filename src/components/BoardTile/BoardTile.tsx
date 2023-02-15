@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { Coordinates, Piece, Tile } from "../../types";
-import { getPieceImage } from "../../utils/getPieceImage";
-import { isKingInCheck } from "../../utils/isKingInCheck";
+import { getPieceImage } from "../../utils/pieceUtils/getPieceImage";
+import { isKingInCheck } from "../../utils/pieceUtils/isKingInCheck";
 import "./BoardTile.scss";
 
 type Props = {

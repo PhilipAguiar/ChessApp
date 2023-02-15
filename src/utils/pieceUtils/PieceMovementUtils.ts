@@ -1,4 +1,4 @@
-import { Coordinates, Piece, Tile } from "../types";
+import { Coordinates, Piece, Tile } from "../../types";
 import { isKingInCheck, isTileUnderAttack } from "./isKingInCheck";
 
 const isEnemyColor = (piece1?: Piece, piece2?: Piece): boolean => {

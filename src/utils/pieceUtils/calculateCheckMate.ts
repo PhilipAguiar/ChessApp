@@ -1,4 +1,4 @@
-import { Piece, Tile } from "../types";
+import { Piece, Tile } from "../../types";
 import { isKingInCheck } from "./isKingInCheck";
 import { bishopMovement, kingMovement, knightMovement, pawnMovement, rookMovement } from "./PieceMovementUtils";
 

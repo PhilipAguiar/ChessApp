@@ -1,4 +1,4 @@
-import { Piece, Tile } from "../types";
+import { Piece, Tile } from "../../types";
 import { bishopMovement, knightMovement, pawnAttacks, rookMovement } from "./PieceMovementUtils";
 
 export const isKingInCheck = (newBoard: Array<Array<Tile>>, kingsColor: string): boolean => {

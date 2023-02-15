@@ -1,112 +1,53 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/FirebaseContext";
 import { Piece, Tile } from "../../types";
-import { calculateCheckMate } from "../../utils/calculateCheckMate";
-import { handleCastling } from "../../utils/handleCastleing";
-import { isKingInCheck } from "../../utils/isKingInCheck";
-import { bishopMovement, isValidMove, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/PieceMovementUtils";
+import { uploadGame } from "../../utils/databaseUtils/databaseUtils";
+import { calculateCheckMate } from "../../utils/pieceUtils/calculateCheckMate";
+import { handleCastling } from "../../utils/pieceUtils/handleCastleing";
+import { isKingInCheck } from "../../utils/pieceUtils/isKingInCheck";
+import { bishopMovement, isValidMove, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/pieceUtils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import PromotionModal from "../PromotionModal/PromotionModal";
 import "./ChessBoard.scss";
 
 type Props = {
+  board: Array<Array<Tile>>;
+  setBoard: Function;
   playerOneScore: Array<string>;
   playerTwoScore: Array<string>;
   setPlayerOneScore: Function;
   setPlayerTwoScore: Function;
   setFlipBoard: Function;
   flipBoard: boolean;
+  playerTurn: "black" | "white";
+  setPlayerTurn: Function;
+  gameID?: string;
+  opponentName?: string;
 };
 
-function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlayerTwoScore, flipBoard, setFlipBoard }: Props) {
-  const [board, setBoard] = useState<Array<Array<Tile>>>([
-    [
-      { piece: { color: "black", name: "rook", hasMoved: false }, moveable: false },
-      { piece: { color: "black", name: "knight" }, moveable: false },
-      { piece: { color: "black", name: "bishop" }, moveable: false },
-      { piece: { color: "black", name: "queen" }, moveable: false },
-      { piece: { color: "black", name: "king", inCheck: false, hasMoved: false }, moveable: false },
-      { piece: { color: "black", name: "bishop" }, moveable: false },
-      { piece: { color: "black", name: "knight" }, moveable: false },
-      { piece: { color: "black", name: "rook", hasMoved: false }, moveable: false },
-    ],
-    [
-      { piece: { color: "black", name: "pawn" }, moveable: false },
-      { piece: { color: "black", name: "pawn" }, moveable: false },
-      { piece: { color: "black", name: "pawn" }, moveable: false },
-      { piece: { color: "black", name: "pawn" }, moveable: false },
-      { piece: { color: "black", name: "pawn" }, moveable: false },
-      { piece: { color: "black", name: "pawn" }, moveable: false },
-      { piece: { color: "black", name: "pawn" }, moveable: false },
-      { piece: { color: "black", name: "pawn" }, moveable: false },
-    ],
-    [
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-    ],
-    [
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-    ],
-    [
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-    ],
-    [
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-      { piece: null, moveable: false },
-    ],
-    [
-      { piece: { color: "white", name: "pawn" }, moveable: false },
-      { piece: { color: "white", name: "pawn" }, moveable: false },
-      { piece: { color: "white", name: "pawn" }, moveable: false },
-      { piece: { color: "white", name: "pawn" }, moveable: false },
-      { piece: { color: "white", name: "pawn" }, moveable: false },
-      { piece: { color: "white", name: "pawn" }, moveable: false },
-      { piece: { color: "white", name: "pawn" }, moveable: false },
-      { piece: { color: "white", name: "pawn" }, moveable: false },
-    ],
-    [
-      { piece: { color: "white", name: "rook", hasMoved: false }, moveable: false },
-      { piece: { color: "white", name: "knight" }, moveable: false },
-      { piece: { color: "white", name: "bishop" }, moveable: false },
-      { piece: { color: "white", name: "queen" }, moveable: false },
-      { piece: { color: "white", name: "king", inCheck: false, hasMoved: false }, moveable: false },
-      { piece: { color: "white", name: "bishop" }, moveable: false },
-      { piece: { color: "white", name: "knight" }, moveable: false },
-      { piece: { color: "white", name: "rook", hasMoved: false }, moveable: false },
-    ],
-  ]);
-
-  const [playerTurn, setPlayerTurn] = useState<"white" | "black">("white");
+function ChessBoard({
+  board,
+  setBoard,
+  playerTurn,
+  setPlayerTurn,
+  playerOneScore,
+  playerTwoScore,
+  setPlayerOneScore,
+  setPlayerTwoScore,
+  flipBoard,
+  setFlipBoard,
+  gameID,
+  opponentName,
+}: Props) {
   const [draggedPiece, setDraggedPiece] = useState<Piece | null>(null);
   const [promotionActive, setPromotionActive] = useState<boolean>(false);
   const [canWhiteCastle, setCanWhiteCastle] = useState<Array<boolean>>([true, true]);
   const [canBlackCastle, setCanBlackCastle] = useState<Array<boolean>>([true, true]);
+  const { currentUser } = useAuth();
 
+  const location = useLocation();
+  const navigate = useNavigate();
   const updateDraggedPiece = (updateDraggedPiece: Piece) => {
     setDraggedPiece(updateDraggedPiece);
   };
@@ -163,7 +104,10 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
             // setPromotionPiece(undefined);
           } else {
             calculateCheckMate(newBoard, playerTurn);
-            setPlayerTurn((prevValue) => (prevValue === "white" ? "black" : "white"));
+
+            if (location.pathname === "/") {
+              setPlayerTurn((prevValue: "black" | "white") => (prevValue === "white" ? "black" : "white"));
+            }
           }
         }
       }
@@ -174,12 +118,37 @@ function ChessBoard({ playerOneScore, playerTwoScore, setPlayerOneScore, setPlay
         });
       });
 
+      if (location.pathname === "/challenge") {
+        console.log("first");
+        let opponentColor: "white" | "black" = playerTurn === "white" ? "black" : "white";
+
+        await uploadGame(newBoard, currentUser.uid, currentUser.displayName, opponentColor);
+
+        navigate(0);
+      }
+
+      if (location.pathname === "/admin") {
+        console.log("first");
+        let opponentColor: "white" | "black" = playerTurn === "white" ? "black" : "white";
+
+        await uploadGame(newBoard, gameID!, opponentName!, opponentColor);
+
+        navigate(0);
+      }
+
       setBoard(newBoard);
     }
     setDraggedPiece(null);
   };
 
   const handleDrag = () => {
+    if (location.pathname === "/challenge" && playerTurn === "black") {
+      return;
+    }
+
+    if (location.pathname === "/admin" && playerTurn === "white") {
+      return;
+    }
     let newBoard = board.map((a) => {
       return a.map((b) => {
         return { ...b };
