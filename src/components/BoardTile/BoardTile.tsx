@@ -76,7 +76,7 @@ function BoardTile({ coordinates, alternate, tile, updateDraggedPiece, handleDro
       onDrop={() => {
         handleDrop(coordinates.x, coordinates.y);
       }}
-      draggable
+      draggable={!!piece}
     >
       {/* <p>{tileID}</p> */}
       {/* <p>{`${tile?.moveable}`}</p> */}

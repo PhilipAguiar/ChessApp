@@ -1,5 +1,5 @@
 import { Tile } from "../../types";
-import { collection, doc, getDocs, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../contexts/FirebaseContext";
 
 export const uploadGame = async (board: Array<Array<Tile>>, gameID: string, playerName: string, playerTurn: "white" | "black") => {
@@ -9,7 +9,14 @@ export const uploadGame = async (board: Array<Array<Tile>>, gameID: string, play
 export const getGame = async (uid: string) => {
   const game = await getDoc(doc(db, "ChessGames", uid));
   const parsedGame = game.data()!.board;
+
   return JSON.parse(parsedGame);
+  // const game: any = {};
+
+  // await onSnapshot(doc(db, "ChessGames", uid), (game: any) => {
+  //   game = { board: game.data()!.board, playerTurn: game.data()!.playerTurn };
+  // });
+  // return game;
 };
 
 export const getAllGames = async () => {

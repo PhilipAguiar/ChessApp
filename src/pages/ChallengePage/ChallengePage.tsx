@@ -1,6 +1,8 @@
+import { collection, doc, getDocs, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
-import { useAuth } from "../../contexts/FirebaseContext";
+import UserCard from "../../components/UserCard/UserCard";
+import { db, useAuth } from "../../contexts/FirebaseContext";
 import { Tile } from "../../types";
 import { getGame, getTurn, uploadGame } from "../../utils/databaseUtils/databaseUtils";
 import "./ChallengePage.scss";
@@ -97,11 +99,10 @@ function ChallengePage() {
     console.log(currentUser.uid);
 
     if (currentUser && currentUser.uid) {
-      const fetchGame = async () => {
-        setBoard(await getGame(currentUser.uid));
+      onSnapshot(doc(db, "ChessGames", currentUser.uid), async () => {
+        setBoard([...(await getGame(currentUser.uid))]);
         setPlayerTurn(await getTurn(currentUser.uid));
-      };
-      fetchGame();
+      });
     }
   }, []);
 
@@ -111,6 +112,8 @@ function ChallengePage() {
 
   return (
     <div className="challenge">
+      <UserCard name="PHILIP AGUIAR" playerTwoScore={playerTwoScore} alternate />
+
       <ChessBoard
         playerOneScore={playerOneScore}
         playerTwoScore={playerTwoScore}
@@ -123,13 +126,7 @@ function ChallengePage() {
         playerTurn={playerTurn}
         setPlayerTurn={setPlayerTurn}
       />
-      {/* <button
-        onClick={() => {
-          uploadGame(board, currentUser.uid, currentUser.displayName, playerTurn);
-        }}
-      >
-        Confirm Move
-      </button> */}
+      <UserCard name={currentUser.displayName} playerOneScore={playerOneScore} />
 
       {playerTurn === "black" && <h2>Waiting for Philip to make a move</h2>}
     </div>

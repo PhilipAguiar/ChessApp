@@ -53,6 +53,14 @@ function ChessBoard({
   };
 
   const handleDrop = async (x: number, y: number) => {
+    if (location.pathname === "/challenge" && playerTurn === "black") {
+      return;
+    }
+
+    if (location.pathname === "/admin" && playerTurn === "white") {
+      return;
+    }
+
     if (draggedPiece) {
       let newBoard = board.map((a) => {
         return a.map((b) => {
@@ -109,6 +117,27 @@ function ChessBoard({
               setPlayerTurn((prevValue: "black" | "white") => (prevValue === "white" ? "black" : "white"));
             }
           }
+          if (location.pathname === "/challenge") {
+            console.log("first");
+            let opponentColor: "white" | "black" = playerTurn === "white" ? "black" : "white";
+            newBoard.forEach((row) => {
+              row.forEach((item) => {
+                item.moveable = false;
+              });
+            });
+            await uploadGame(newBoard, currentUser.uid, currentUser.displayName, opponentColor);
+          }
+
+          if (location.pathname === "/admin") {
+            console.log("first");
+            let opponentColor: "white" | "black" = playerTurn === "white" ? "black" : "white";
+            newBoard.forEach((row) => {
+              row.forEach((item) => {
+                item.moveable = false;
+              });
+            });
+            await uploadGame(newBoard, gameID!, opponentName!, opponentColor);
+          }
         }
       }
 
@@ -117,24 +146,6 @@ function ChessBoard({
           item.moveable = false;
         });
       });
-
-      if (location.pathname === "/challenge") {
-        console.log("first");
-        let opponentColor: "white" | "black" = playerTurn === "white" ? "black" : "white";
-
-        await uploadGame(newBoard, currentUser.uid, currentUser.displayName, opponentColor);
-
-        navigate(0);
-      }
-
-      if (location.pathname === "/admin") {
-        console.log("first");
-        let opponentColor: "white" | "black" = playerTurn === "white" ? "black" : "white";
-
-        await uploadGame(newBoard, gameID!, opponentName!, opponentColor);
-
-        navigate(0);
-      }
 
       setBoard(newBoard);
     }

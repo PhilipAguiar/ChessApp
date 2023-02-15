@@ -1,7 +1,9 @@
+import { doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
+import { db } from "../../contexts/FirebaseContext";
 import { Game, Tile } from "../../types";
-import { getAllGames } from "../../utils/databaseUtils/databaseUtils";
+import { getAllGames, getGame, getTurn } from "../../utils/databaseUtils/databaseUtils";
 
 function AdminPage() {
   const [listOfGames, setListOfGames] = useState<Array<Game>>();
@@ -33,8 +35,12 @@ function AdminPage() {
 
   useEffect(() => {
     if (activeGame) {
-      setBoard(activeGame.board);
-      setPlayerTurn(activeGame.playerTurn);
+      onSnapshot(doc(db, "ChessGames", activeGame.gameID), async (game: any) => {
+        setBoard([...(await getGame(activeGame.gameID))]);
+        setPlayerTurn(await getTurn(activeGame.gameID));
+      });
+      // setBoard(activeGame.board);
+      // setPlayerTurn(activeGame.playerTurn);
     }
   }, [activeGame]);
 
