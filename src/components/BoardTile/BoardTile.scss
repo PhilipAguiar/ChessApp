@@ -1,6 +1,7 @@
 @use "../../styles/partials/mixins" as *;
 
 .tile {
+  position: relative;
   display: flex;
   box-sizing: border-box;
   flex-direction: column;
@@ -25,11 +26,11 @@
     }
   }
 
-  &--moveable {
-    background-color: yellow;
-    color: black;
-    transition: background-color 0s, color 0s;
-  }
+  // &--moveable {
+  //   background-color: yellow;
+  //   color: black;
+  //   transition: background-color 0s, color 0s;
+  // }
 
   &--check {
     background-color: red;
@@ -41,5 +42,13 @@
     &--large {
       height: 90%;
     }
+  }
+
+  &__moveable {
+    position: absolute;
+    border-radius: 25px;
+    height: 30%;
+    background-color: orange;
+    width: 30%;
   }
 }

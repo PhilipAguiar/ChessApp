@@ -78,11 +78,9 @@ function BoardTile({ coordinates, alternate, tile, updateDraggedPiece, handleDro
       }}
       draggable={!!piece}
     >
-      {/* <p>{tileID}</p> */}
-      {/* <p>{`${tile?.moveable}`}</p> */}
-      {/* <p>{`${coordinates.x}, ${coordinates.y}`}</p> */}
+      {tile.moveable && <div className="tile__moveable"></div>}
+
       {pieceImg && <img className={`tile__piece ${largePieces ? "tile__piece--large" : ""}`} src={pieceImg} />}
-      {/* <p>{piece?.color}</p> */}
     </div>
   );
 }
