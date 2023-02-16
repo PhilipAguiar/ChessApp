@@ -19,13 +19,13 @@ export const pawnMovement = (draggedPiece: Piece, board: Array<Array<Tile>>): Ar
 
   //check if pawn is at starting spot for ability to move two squares
   if (draggedPiece.color === "white" && draggedPiece.y! === 6) {
-    if (!board[draggedPiece.y! + integer * 2][draggedPiece.x!].piece) {
+    if (!board[draggedPiece.y! + integer * 2][draggedPiece.x!].piece && !board[draggedPiece.y! + integer][draggedPiece.x!].piece) {
       availableMoves.push({ y: draggedPiece.y! + integer * 2, x: draggedPiece.x! });
     }
   }
 
   if (draggedPiece.color === "black" && draggedPiece.y! === 1) {
-    if (!board[draggedPiece.y! + integer * 2][draggedPiece.x!].piece) {
+    if (!board[draggedPiece.y! + integer * 2][draggedPiece.x!].piece && !board[draggedPiece.y! + integer][draggedPiece.x!].piece) {
       availableMoves.push({ y: draggedPiece.y! + integer * 2, x: draggedPiece.x! });
     }
   }
