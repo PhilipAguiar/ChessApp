@@ -55,7 +55,7 @@ function BoardTile({ coordinates, alternate, tile, updateDraggedPiece, handleDro
   return (
     <div
       id={`${coordinates.x}${coordinates.y}`}
-      className={`tile tile--${theme} ${alternate && `tile--${theme}--alternate`} ${tile.moveable && "tile--moveable"} ${inCheck && "tile--check"}`}
+      className={`tile tile--${theme} ${alternate && `tile--${theme}--alternate`} ${tile.justMoved && "tile--highlight"} ${inCheck && "tile--check"}`}
       onClick={() => {
         if (draggedPiece) {
           handleDrop(coordinates.x, coordinates.y);

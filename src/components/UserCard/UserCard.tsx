@@ -24,7 +24,7 @@ function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
     <div className={`user-card ${alternate ? "user-card--alternate" : ""}`}>
       {playerTwoScore && (
         <div className="user-card__scoreboard user-card__scoreboard--alternate">
-          {playerTwoScore.map((piece, i) => {
+          {playerTwoScore.sort().map((piece, i) => {
             return (
               <img
                 className={`user-card__piece ${largePieces ? "user-card__piece--large" : ""}`}
@@ -40,7 +40,7 @@ function UserCard({ name, alternate, playerOneScore, playerTwoScore }: Props) {
 
       {playerOneScore && (
         <div className="user-card__scoreboard">
-          {playerOneScore.map((piece, i) => {
+          {playerOneScore.sort().map((piece, i) => {
             return (
               <img
                 className={`user-card__piece ${largePieces ? "user-card__piece--large" : ""}`}

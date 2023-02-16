@@ -5,6 +5,7 @@ export type Coordinates = {
 export type Tile = {
   piece: Piece | null;
   moveable: boolean;
+  justMoved?: boolean;
 };
 
 export type Game = {

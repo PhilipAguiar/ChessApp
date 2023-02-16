@@ -5,7 +5,7 @@ import { Piece, Tile } from "../../types";
 import { uploadGame } from "../../utils/databaseUtils/databaseUtils";
 import { calculateCheckMate } from "../../utils/pieceUtils/calculateCheckMate";
 import { handleCastling } from "../../utils/pieceUtils/handleCastleing";
-import { isKingInCheck } from "../../utils/pieceUtils/isKingInCheck";
+
 import { bishopMovement, isValidMove, kingMovement, knightMovement, pawnMovement, rookMovement } from "../../utils/pieceUtils/PieceMovementUtils";
 import BoardTile from "../BoardTile/BoardTile";
 import PromotionModal from "../PromotionModal/PromotionModal";
@@ -103,13 +103,18 @@ function ChessBoard({
             }
           }
 
+          newBoard.forEach((row) => {
+            row.forEach((item) => {
+              item.justMoved = false;
+            });
+          });
+
           newBoard[y][x] = board[draggedPiece!.y!][draggedPiece!.x!];
-          newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false };
+          newBoard[y][x].justMoved = true;
+          newBoard[draggedPiece!.y!][draggedPiece!.x!] = { piece: null, moveable: false, justMoved: true };
 
           if (newBoard[y][x].piece!.name === "pawn" && (y === 7 || y === 0)) {
             setPromotionActive(true);
-            // newBoard[y][x].piece!.name = promotionPiece!;
-            // setPromotionPiece(undefined);
           } else {
             calculateCheckMate(newBoard, playerTurn);
 

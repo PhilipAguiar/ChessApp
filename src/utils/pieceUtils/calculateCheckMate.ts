@@ -24,7 +24,8 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                     return { ...b };
                   });
                 });
-                newBoard[test.y][test.x].piece = { name: "pawn", color: opponentColor };
+                newBoard[test.y][test.x] = board[newPiece!.y!][newPiece!.x!];
+                newBoard[newPiece!.y!][newPiece!.x!] = { piece: null, moveable: false, justMoved: false };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
                 }
@@ -39,7 +40,8 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                     return { ...b };
                   });
                 });
-                newBoard[test.y][test.x].piece = { name: "knight", color: opponentColor };
+                newBoard[test.y][test.x] = board[newPiece!.y!][newPiece!.x!];
+                newBoard[newPiece!.y!][newPiece!.x!] = { piece: null, moveable: false, justMoved: false };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
                 }
@@ -54,7 +56,8 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                     return { ...b };
                   });
                 });
-                newBoard[test.y][test.x].piece = { name: "bishop", color: opponentColor };
+                newBoard[test.y][test.x] = board[newPiece!.y!][newPiece!.x!];
+                newBoard[newPiece!.y!][newPiece!.x!] = { piece: null, moveable: false, justMoved: false };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
                 }
@@ -69,7 +72,8 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                   });
                 });
 
-                newBoard[test.y][test.x].piece = { name: "rook", color: opponentColor };
+                newBoard[test.y][test.x] = board[newPiece!.y!][newPiece!.x!];
+                newBoard[newPiece!.y!][newPiece!.x!] = { piece: null, moveable: false, justMoved: false };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
                 }
@@ -85,7 +89,8 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                   });
                 });
 
-                newBoard[test.y][test.x].piece = { name: "rook", color: opponentColor };
+                newBoard[test.y][test.x] = board[newPiece!.y!][newPiece!.x!];
+                newBoard[newPiece!.y!][newPiece!.x!] = { piece: null, moveable: false, justMoved: false };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
                 }
@@ -96,7 +101,8 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                     return { ...b };
                   });
                 });
-                newBoard[test.y][test.x].piece = { name: "bishop", color: opponentColor };
+                newBoard[test.y][test.x] = board[newPiece!.y!][newPiece!.x!];
+                newBoard[newPiece!.y!][newPiece!.x!] = { piece: null, moveable: false, justMoved: false };
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
                 }
@@ -104,6 +110,7 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
               break;
             }
             case "king":
+              console.log(kingMovement(newPiece, board));
               kingMovement(newPiece, board).forEach((test) => {
                 const newBoard = board.map((a) => {
                   return a.map((b) => {
@@ -111,7 +118,9 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
                   });
                 });
 
-                newBoard[test.y][test.x].piece = { name: "king", color: opponentColor };
+                newBoard[test.y][test.x] = board[newPiece!.y!][newPiece!.x!];
+                newBoard[newPiece!.y!][newPiece!.x!] = { piece: null, moveable: false, justMoved: false };
+
                 if (!isKingInCheck(newBoard, opponentColor)) {
                   checkmate = false;
                 }
