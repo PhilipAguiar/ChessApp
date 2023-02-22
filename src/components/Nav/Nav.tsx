@@ -15,7 +15,7 @@ function Nav() {
         {<Link to={"/challenge"}>Challenge Me</Link>}
       </div>
       {!currentUser ? (
-        <Link className="nav__list-item" to={"/signup"}>
+        <Link className="nav__list-item" to={"/login"}>
           Login
         </Link>
       ) : (

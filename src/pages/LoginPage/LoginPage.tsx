@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useAuth } from "../../contexts/FirebaseContext";
 import { Link, useNavigate } from "react-router-dom";
+import "./LoginPage.scss";
 
 function LoginPage() {
   const emailRef = useRef<HTMLInputElement | null>(null);

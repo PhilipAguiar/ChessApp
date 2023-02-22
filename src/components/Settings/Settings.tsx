@@ -12,7 +12,7 @@ function Settings({ setFlipBoard }: Props) {
   const { darkMode, toggleMode } = useContext(DarkModeContext);
 
   return (
-    <div className="settings">
+    <div className={`settings ${darkMode && "settings--dark"}`}>
       <h1>Settings:</h1>
 
       <button
@@ -27,7 +27,7 @@ function Settings({ setFlipBoard }: Props) {
         <div className="settings__button-container">
           <p className="settings__text">Dark Mode: </p>
           <button
-            className="settings__button"
+            className={`settings__button ${darkMode && "settings__button--dark"}`}
             onClick={() => {
               toggleMode();
             }}

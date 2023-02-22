@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
 import { db } from "../../contexts/FirebaseContext";
 import { Game, Tile } from "../../types";
-import { getAllGames, getGame, getTurn } from "../../utils/databaseUtils/databaseUtils";
+import { getAllGames, getGame } from "../../utils/databaseUtils/databaseUtils";
 
 function AdminPage() {
   const [listOfGames, setListOfGames] = useState<Array<Game>>();
@@ -35,9 +35,13 @@ function AdminPage() {
 
   useEffect(() => {
     if (activeGame) {
-      onSnapshot(doc(db, "ChessGames", activeGame.gameID), async (game: any) => {
-        setBoard([...(await getGame(activeGame.gameID))]);
-        setPlayerTurn(await getTurn(activeGame.gameID));
+      onSnapshot(doc(db, "ChessGames", activeGame.gameID), async () => {
+        const game = await getGame(activeGame.gameID);
+
+        setBoard([...game.board]);
+        setPlayerTurn(game.playerTurn);
+        setPlayerOneScore(game.playerOneScore);
+        setPlayerTwoScore(game.playerTwoScore);
       });
       // setBoard(activeGame.board);
       // setPlayerTurn(activeGame.playerTurn);

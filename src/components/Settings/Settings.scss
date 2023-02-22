@@ -1,18 +1,27 @@
 @use "../../styles/partials/mixins" as *;
 
 .settings {
-  width: 100vw;
+  width: 90vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  margin: 0 3%;
+  border-radius: 20px;
+  padding-bottom: 2rem;
+  border: 4px solid black;
+  margin-top: 2rem;
   @include tablet {
-    width: 80vh;
+    margin-top: 0;
+    width: 30%;
+  }
+
+  &--dark {
+    @include dark-mode;
   }
 
   &__wrapper {
     display: flex;
-    width: 45%;
+    width: 80%;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -24,6 +33,10 @@
     border-radius: 50px;
     background-color: transparent;
     border: 1px solid black;
+
+    &--dark {
+      // @include dark-mode;
+    }
   }
   &__button-container {
     display: flex;

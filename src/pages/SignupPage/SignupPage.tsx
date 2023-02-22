@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-// import "./SignupPage.scss";
+import "./SignupPage.scss";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { useNavigate } from "react-router-dom";

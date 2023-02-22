@@ -97,21 +97,23 @@ function HomePage() {
   const [flipBoard, setFlipBoard] = useState<boolean>(false);
 
   return (
-    <div className={`App ${darkMode ? "App--dark" : ""}`}>
-      <UserCard name="Player 2" playerTwoScore={playerTwoScore} alternate />
-      <ChessBoard
-        playerOneScore={playerOneScore}
-        playerTwoScore={playerTwoScore}
-        setPlayerOneScore={setPlayerOneScore}
-        setPlayerTwoScore={setPlayerTwoScore}
-        flipBoard={flipBoard}
-        setFlipBoard={setFlipBoard}
-        board={board}
-        setBoard={setBoard}
-        playerTurn={playerTurn}
-        setPlayerTurn={setPlayerTurn}
-      />
-      <UserCard name="Player 1" playerOneScore={playerOneScore} />
+    <div className={`home ${darkMode ? "home--dark" : ""}`}>
+      <div className="home__board-container">
+        <UserCard name="Player 2" playerTwoScore={playerTwoScore} alternate />
+        <ChessBoard
+          playerOneScore={playerOneScore}
+          playerTwoScore={playerTwoScore}
+          setPlayerOneScore={setPlayerOneScore}
+          setPlayerTwoScore={setPlayerTwoScore}
+          flipBoard={flipBoard}
+          setFlipBoard={setFlipBoard}
+          board={board}
+          setBoard={setBoard}
+          playerTurn={playerTurn}
+          setPlayerTurn={setPlayerTurn}
+        />
+        <UserCard name="Player 1" playerOneScore={playerOneScore} />
+      </div>
       <Settings setFlipBoard={setFlipBoard} />
     </div>
   );

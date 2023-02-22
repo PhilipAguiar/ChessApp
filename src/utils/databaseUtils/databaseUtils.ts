@@ -2,15 +2,34 @@ import { Tile } from "../../types";
 import { collection, doc, getDocs, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../contexts/FirebaseContext";
 
-export const uploadGame = async (board: Array<Array<Tile>>, gameID: string, playerName: string, playerTurn: "white" | "black") => {
-  await setDoc(doc(db, "ChessGames", gameID), { board: JSON.stringify(board), playerTurn: playerTurn, playerName: playerName, gameID: gameID });
+export const uploadGame = async (
+  board: Array<Array<Tile>>,
+  gameID: string,
+  playerName: string,
+  playerTurn: "white" | "black",
+  playerOneScore: Array<string>,
+  playerTwoScore: Array<string>
+) => {
+  await setDoc(doc(db, "ChessGames", gameID), {
+    board: JSON.stringify(board),
+    playerTurn: playerTurn,
+    playerName: playerName,
+    gameID: gameID,
+    playerOneScore: playerOneScore,
+    playerTwoScore: playerTwoScore,
+  });
 };
 
 export const getGame = async (uid: string) => {
   const game = await getDoc(doc(db, "ChessGames", uid));
-  const parsedGame = game.data()!.board;
 
-  return JSON.parse(parsedGame);
+  return {
+    board: JSON.parse(game.data()!.board),
+    playerTurn: game.data()!.playerTurn,
+    playerName: game.data()!.playerName,
+    playerOneScore: game.data()!.playerOneScore,
+    playerTwoScore: game.data()!.playerTwoScore,
+  };
   // const game: any = {};
 
   // await onSnapshot(doc(db, "ChessGames", uid), (game: any) => {
@@ -24,12 +43,6 @@ export const getAllGames = async () => {
   return snapshot.docs.map((game: any) => {
     return game.data();
   });
-};
-
-export const getTurn = async (uid: string) => {
-  const game = await getDoc(doc(db, "ChessGames", uid));
-
-  return game.data()!.playerTurn;
 };
 
 export const isAdmin = (uid: string): boolean => {

@@ -70,14 +70,15 @@ function ChessBoard({
 
       if (!(draggedPiece.x === x && draggedPiece?.y === y)) {
         if (newBoard[y][x].moveable) {
+          let newPlayerOneScore = [...playerOneScore];
+          let newPlayerTwoScore = [...playerTwoScore];
+
           if (newBoard[y][x].piece?.name) {
             if (playerTurn === "white") {
-              let newPlayerOneScore = [...playerOneScore];
               newPlayerOneScore.push(newBoard[y][x].piece!.name);
               setPlayerOneScore(newPlayerOneScore);
             }
             if (playerTurn === "black") {
-              let newPlayerTwoScore = [...playerTwoScore];
               newPlayerTwoScore.push(newBoard[y][x].piece!.name);
               setPlayerTwoScore(newPlayerTwoScore);
             }
@@ -130,7 +131,7 @@ function ChessBoard({
                 item.moveable = false;
               });
             });
-            await uploadGame(newBoard, currentUser.uid, currentUser.displayName, opponentColor);
+            await uploadGame(newBoard, currentUser.uid, currentUser.displayName, opponentColor, newPlayerOneScore, newPlayerTwoScore);
           }
 
           if (location.pathname === "/admin") {
@@ -141,7 +142,7 @@ function ChessBoard({
                 item.moveable = false;
               });
             });
-            await uploadGame(newBoard, gameID!, opponentName!, opponentColor);
+            await uploadGame(newBoard, gameID!, opponentName!, opponentColor, newPlayerOneScore, newPlayerTwoScore);
           }
         }
       }

@@ -1,10 +1,11 @@
 import { collection, doc, getDocs, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
 import UserCard from "../../components/UserCard/UserCard";
 import { db, useAuth } from "../../contexts/FirebaseContext";
 import { Tile } from "../../types";
-import { getGame, getTurn, uploadGame } from "../../utils/databaseUtils/databaseUtils";
+import { getGame } from "../../utils/databaseUtils/databaseUtils";
 import "./ChallengePage.scss";
 function ChallengePage() {
   const { currentUser } = useAuth();
@@ -95,14 +96,20 @@ function ChallengePage() {
   const [playerTurn, setPlayerTurn] = useState<"white" | "black">("white");
   const [flipBoard, setFlipBoard] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(currentUser.uid);
+  const navigate = useNavigate();
 
+  useEffect(() => {
     if (currentUser && currentUser.uid) {
       onSnapshot(doc(db, "ChessGames", currentUser.uid), async () => {
-        setBoard([...(await getGame(currentUser.uid))]);
-        setPlayerTurn(await getTurn(currentUser.uid));
+        const game = await getGame(currentUser.uid);
+
+        setBoard([...game.board]);
+        setPlayerTurn(game.playerTurn);
+        setPlayerOneScore(game.playerOneScore);
+        setPlayerTwoScore(game.playerTwoScore);
       });
+    } else {
+      navigate("/signup");
     }
   }, []);
 
