@@ -1,19 +1,19 @@
 @use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/colors" as *;
 
 .home {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   flex: 1;
-  transition: background-color 1s, color 1s;
+  transition: background-color 0.5s, color 0.5s;
+  z-index: 0;
   &--dark {
     @include dark-mode;
   }
 
   @include tablet {
     flex-direction: row;
-    align-items: center;
     // padding-top: 2.5%;
   }
 
@@ -26,5 +26,79 @@
     @include tablet {
       align-items: flex-end;
     }
+  }
+  &__settings {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    height: 100%;
+    @include tablet {
+      width: 30%;
+      margin-left: 1rem;
+    }
+  }
+
+  &__link {
+    font-size: 3rem;
+    text-decoration: none;
+    margin: 2rem 0 3rem;
+    position: relative;
+    background-color: white;
+    padding: 1rem;
+    justify-self: flex-start;
+    border: 2px solid black;
+    color: red;
+    border-radius: 20px;
+
+    &--dark {
+      @include dark-mode;
+    }
+
+    &:hover {
+      border: 0px solid white;
+
+      &::before {
+        content: "";
+        border-radius: 20px;
+
+        position: absolute;
+        left: -2px;
+        top: -2px;
+        background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000);
+        background-size: 400%;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        z-index: -1;
+        animation: steam 60s linear infinite;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: -2px;
+        top: -2px;
+        background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000);
+        background-size: 400%;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        z-index: -1;
+        animation: steam 20s linear infinite;
+        filter: blur(30px);
+      }
+    }
+  }
+}
+
+@keyframes steam {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
   }
 }

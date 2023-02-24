@@ -51,9 +51,10 @@ function AdminPage() {
   return (
     <div>
       {listOfGames &&
-        listOfGames.map((game: Game) => {
+        listOfGames.map((game: Game, i) => {
           return (
             <p
+              key={i}
               onClick={() => {
                 setActiveGame(game);
               }}

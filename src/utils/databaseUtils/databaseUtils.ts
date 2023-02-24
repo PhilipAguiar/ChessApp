@@ -45,8 +45,10 @@ export const getAllGames = async () => {
   });
 };
 
-export const isAdmin = (uid: string): boolean => {
-  if (uid === process.env.REACT_APP_ADMIN_UID) {
+export const isAdmin = async (uid: string): Promise<boolean> => {
+  const user = await getDoc(doc(db, "adminList", uid));
+
+  if (user.data()?.isAdmin) {
     return true;
   }
   return false;

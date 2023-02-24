@@ -5,6 +5,7 @@ import Settings from "../../components/Settings/Settings";
 import UserCard from "../../components/UserCard/UserCard";
 import { DarkModeContext } from "../../contexts/DarkModeContext";
 import { Tile } from "../../types";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const { darkMode } = useContext(DarkModeContext);
@@ -114,7 +115,16 @@ function HomePage() {
         />
         <UserCard name="Player 1" playerOneScore={playerOneScore} />
       </div>
-      <Settings setFlipBoard={setFlipBoard} />
+
+      <div className="home__settings">
+        {
+          <Link className={`home__link ${darkMode && "home__link--dark"}`} to={"/challenge"}>
+            Challenge Me!
+          </Link>
+        }
+
+        <Settings setFlipBoard={setFlipBoard} />
+      </div>
     </div>
   );
 }

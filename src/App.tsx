@@ -8,9 +8,22 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import { isAdmin } from "./utils/databaseUtils/databaseUtils";
 import "./App.scss";
+import { useEffect, useState } from "react";
 
 function App() {
   const { currentUser } = useAuth();
+
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
+
+  useEffect(() => {
+    if (currentUser) {
+      isAdmin(currentUser.uid).then((res: any) => {
+        console.log(res);
+        setIsUserAdmin(res);
+      });
+    }
+  }, []);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -21,7 +34,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/challenge" element={<ChallengePage />} />
 
-          {currentUser && isAdmin(currentUser.uid) && <Route path="/admin" element={<AdminPage />} />}
+          {isUserAdmin && <Route path="/admin" element={<AdminPage />} />}
         </Routes>
       </BrowserRouter>
     </div>
