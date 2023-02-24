@@ -8,7 +8,7 @@ type Props = {
 };
 
 function Settings({ setFlipBoard }: Props) {
-  const { themeSwitcher, pieceSwitcher } = useContext(ThemeContext);
+  const { theme, themeSwitcher, pieceSet, pieceSwitcher } = useContext(ThemeContext);
   const { darkMode, toggleMode } = useContext(DarkModeContext);
   const [settingActive, setSettingActive] = useState<boolean>(true);
   const optionRef = useRef<HTMLDivElement>(null);
@@ -59,6 +59,7 @@ function Settings({ setFlipBoard }: Props) {
               onChange={(e) => {
                 themeSwitcher(e.target.value);
               }}
+              defaultValue={theme}
             >
               <option value="default">Default</option>
               <option value="red">Red</option>
@@ -74,6 +75,7 @@ function Settings({ setFlipBoard }: Props) {
               onChange={(e) => {
                 pieceSwitcher(e.target.value);
               }}
+              defaultValue={pieceSet}
             >
               <option value="default">Default</option>
               <option value="default-shadows">Default w/Shadows</option>
