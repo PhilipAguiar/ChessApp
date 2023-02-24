@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 type ContextType = {
   theme: string;
@@ -27,6 +27,26 @@ const ThemeProvider = (props: any) => {
     setPieceSet(pieceSetName);
   };
 
+  useEffect(() => {
+    const theme = localStorage.getItem("theme");
+    const pieceSet = localStorage.getItem("pieceSet");
+
+    if (theme) {
+      setTheme(theme);
+    }
+
+    if (pieceSet) {
+      setPieceSet(pieceSet);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("pieceSet", pieceSet);
+  }, [pieceSet]);
   return (
     <>
       <ThemeContext.Provider value={{ theme, themeSwitcher, pieceSet, pieceSwitcher }}>{props.children}</ThemeContext.Provider>
