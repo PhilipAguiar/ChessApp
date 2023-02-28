@@ -8,13 +8,31 @@
   flex: 1;
   transition: background-color 0.5s, color 0.5s;
   z-index: 0;
-  &--dark {
-    @include dark-mode;
-  }
+  align-items: center;
 
   @include tablet {
+    width: 100%;
     flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
     // padding-top: 2.5%;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+    @include desktop {
+      width: 100%;
+      margin: auto;
+      justify-content: space-around;
+      flex-direction: row;
+      max-width: 1300px;
+    }
   }
 
   &__board-container {
@@ -22,11 +40,38 @@
     flex-direction: column;
     align-items: center;
     width: 66%;
-
+    height: 100%;
     @include tablet {
-      align-items: flex-end;
+      width: auto;
+      justify-content: flex-start;
     }
   }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid black;
+    width: 80%;
+    height: 100%;
+    align-self: flex-start;
+    margin: 1rem auto 2rem;
+    text-align: center;
+    padding-bottom: 1rem;
+    max-width: 700px;
+
+    @include desktop {
+      margin: 0;
+      width: 40%;
+    }
+  }
+
+  &__image {
+    width: 80%;
+    object-fit: cover;
+    margin: 0 5%;
+  }
+
   &__settings {
     display: flex;
     flex-direction: column;
@@ -35,15 +80,17 @@
     width: 90vw;
     height: 100%;
     @include tablet {
-      width: 30%;
-      margin-left: 1rem;
+      width: 20%;
     }
   }
 
+  &__title {
+    margin: 1rem 0;
+  }
+
   &__link {
-    font-size: 3rem;
+    font-size: 2rem;
     text-decoration: none;
-    margin: 2rem 0 3rem;
     position: relative;
     background-color: white;
     padding: 1rem;
@@ -51,14 +98,15 @@
     border: 2px solid black;
     color: red;
     border-radius: 20px;
+    width: 80%;
+    margin: 1rem auto;
 
     &--dark {
       @include dark-mode;
     }
 
     &:hover {
-      border: 0px solid white;
-
+      border: 2px solid transparent;
       &::before {
         content: "";
         border-radius: 20px;

@@ -1,6 +1,13 @@
+@use "./styles/partials/mixins" as *;
+@use "./styles/partials/colors" as *;
+
 .App {
   display: flex;
   flex-direction: column;
+  transition: background-color 0.5s, color 0.5s;
 
   min-height: 100vh;
+  &--dark {
+    @include dark-mode;
+  }
 }

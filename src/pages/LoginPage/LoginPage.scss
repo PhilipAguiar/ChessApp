@@ -3,8 +3,8 @@
 .login {
   display: flex;
   width: 80%;
-  margin: auto;
-  justify-content: center;
+  margin: 0 auto;
+  padding-top: 10%;
 
   @include tablet {
   }

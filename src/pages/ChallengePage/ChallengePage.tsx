@@ -1,13 +1,16 @@
-import { collection, doc, getDocs, getDoc, setDoc, onSnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
 import UserCard from "../../components/UserCard/UserCard";
 import { db, useAuth } from "../../contexts/FirebaseContext";
-import { Tile } from "../../types";
-import { getGame } from "../../utils/databaseUtils/databaseUtils";
+import { Comment, Tile } from "../../types";
+import { getChatLog, getGame } from "../../utils/databaseUtils/databaseUtils";
 import "./ChallengePage.scss";
-function ChallengePage() {
+import { DarkModeContext } from "../../contexts/DarkModeContext";
+import ChatBox from "../../components/ChatBox/ChatBox";
+
+function ChallengePage({ flipBoard }: { flipBoard: boolean }) {
   const { currentUser } = useAuth();
   const [board, setBoard] = useState<Array<Array<Tile>>>([
     [
@@ -94,7 +97,9 @@ function ChallengePage() {
   const [playerOneScore, setPlayerOneScore] = useState<Array<string>>([]);
   const [playerTwoScore, setPlayerTwoScore] = useState<Array<string>>([]);
   const [playerTurn, setPlayerTurn] = useState<"white" | "black">("white");
-  const [flipBoard, setFlipBoard] = useState<boolean>(false);
+  const [chatLog, setChatLog] = useState<Array<Comment>>([]);
+
+  const { darkMode } = useContext(DarkModeContext);
 
   const navigate = useNavigate();
 
@@ -108,6 +113,12 @@ function ChallengePage() {
         setPlayerOneScore(game.playerOneScore);
         setPlayerTwoScore(game.playerTwoScore);
       });
+
+      onSnapshot(doc(db, "ChatLogs", currentUser.uid), async () => {
+        const chatLog = await getChatLog(currentUser.uid);
+
+        setChatLog(chatLog);
+      });
     } else {
       navigate("/signup");
     }
@@ -118,24 +129,31 @@ function ChallengePage() {
   }
 
   return (
-    <div className="challenge">
-      <UserCard name="PHILIP AGUIAR" playerTwoScore={playerTwoScore} alternate />
+    <div className={`challenge ${darkMode ? "challenge--dark" : ""}`}>
+      <div className="challenge__board-wrapper">
+        <UserCard name="PHILIP AGUIAR" playerTwoScore={playerTwoScore} alternate />
 
-      <ChessBoard
-        playerOneScore={playerOneScore}
-        playerTwoScore={playerTwoScore}
-        setPlayerOneScore={setPlayerOneScore}
-        setPlayerTwoScore={setPlayerTwoScore}
-        flipBoard={flipBoard}
-        setFlipBoard={setFlipBoard}
-        board={board}
-        setBoard={setBoard}
-        playerTurn={playerTurn}
-        setPlayerTurn={setPlayerTurn}
-      />
-      <UserCard name={currentUser.displayName} playerOneScore={playerOneScore} />
+        <ChessBoard
+          playerOneScore={playerOneScore}
+          playerTwoScore={playerTwoScore}
+          setPlayerOneScore={setPlayerOneScore}
+          setPlayerTwoScore={setPlayerTwoScore}
+          flipBoard={flipBoard}
+          board={board}
+          setBoard={setBoard}
+          playerTurn={playerTurn}
+          setPlayerTurn={setPlayerTurn}
+        />
+        <UserCard name={currentUser.displayName} playerOneScore={playerOneScore} />
 
-      {playerTurn === "black" && <h2>Waiting for Philip to make a move</h2>}
+        {playerTurn === "black" && (
+          <>
+            <h2 className="challenge__text">Waiting for Philip to make a move... </h2>
+            <p style={{ textAlign: "center" }}>(I'll make a move when as soon as possible)</p>
+          </>
+        )}
+      </div>
+      <ChatBox userID={currentUser.uid} chatLog={chatLog} />
     </div>
   );
 }

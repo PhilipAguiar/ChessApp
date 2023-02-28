@@ -23,3 +23,8 @@ export type Piece = {
   x?: number;
   y?: number;
 };
+
+export type Comment = {
+  user: string;
+  comment: string;
+};

@@ -8,12 +8,15 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import { isAdmin } from "./utils/databaseUtils/databaseUtils";
 import "./App.scss";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { DarkModeContext } from "./contexts/DarkModeContext";
 
 function App() {
   const { currentUser } = useAuth();
+  const { darkMode } = useContext(DarkModeContext);
 
   const [isUserAdmin, setIsUserAdmin] = useState(false);
+  const [flipBoard, setFlipBoard] = useState<boolean>(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -25,16 +28,16 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className={`App ${darkMode ? "App--dark" : ""}`}>
       <BrowserRouter>
-        <Nav />
+        <Nav setFlipBoard={setFlipBoard} />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage flipBoard={flipBoard} />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/challenge" element={<ChallengePage />} />
+          <Route path="/challenge" element={<ChallengePage flipBoard={flipBoard} />} />
 
-          {isUserAdmin && <Route path="/admin" element={<AdminPage />} />}
+          {isUserAdmin && <Route path="/admin" element={<AdminPage flipBoard={flipBoard} />} />}
         </Routes>
       </BrowserRouter>
     </div>

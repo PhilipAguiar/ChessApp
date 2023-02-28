@@ -18,7 +18,6 @@ type Props = {
   playerTwoScore: Array<string>;
   setPlayerOneScore: Function;
   setPlayerTwoScore: Function;
-  setFlipBoard: Function;
   flipBoard: boolean;
   playerTurn: "black" | "white";
   setPlayerTurn: Function;
@@ -36,7 +35,6 @@ function ChessBoard({
   setPlayerOneScore,
   setPlayerTwoScore,
   flipBoard,
-  setFlipBoard,
   gameID,
   opponentName,
 }: Props) {
@@ -243,16 +241,6 @@ function ChessBoard({
       handleDrag();
     }
   }, [draggedPiece]);
-
-  // useEffect(() => {
-  //   if (playerTurn === "white") {
-  //     setFlipBoard(false);
-  //   }
-
-  //   if (playerTurn === "black") {
-  //     setFlipBoard(true);
-  //   }
-  // }, [playerTurn]);
 
   return (
     <div className={`board ${flipBoard ? "board--flipped" : ""}`}>

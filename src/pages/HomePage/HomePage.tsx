@@ -1,14 +1,12 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import "./HomePage.scss";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
-import Settings from "../../components/Settings/Settings";
 import UserCard from "../../components/UserCard/UserCard";
-import { DarkModeContext } from "../../contexts/DarkModeContext";
 import { Tile } from "../../types";
 import { Link } from "react-router-dom";
+import Knight from "../../assets/Knight.png";
 
-function HomePage() {
-  const { darkMode } = useContext(DarkModeContext);
+function HomePage({ flipBoard }: { flipBoard: boolean }) {
   const [board, setBoard] = useState<Array<Array<Tile>>>([
     [
       { piece: { color: "black", name: "rook", hasMoved: false }, moveable: false },
@@ -95,36 +93,41 @@ function HomePage() {
   const [playerTwoScore, setPlayerTwoScore] = useState<Array<string>>([]);
   const [playerTurn, setPlayerTurn] = useState<"white" | "black">("white");
 
-  const [flipBoard, setFlipBoard] = useState<boolean>(false);
-
   return (
-    <div className={`home ${darkMode ? "home--dark" : ""}`}>
-      <div className="home__board-container">
-        <UserCard name="Player 2" playerTwoScore={playerTwoScore} alternate />
-        <ChessBoard
-          playerOneScore={playerOneScore}
-          playerTwoScore={playerTwoScore}
-          setPlayerOneScore={setPlayerOneScore}
-          setPlayerTwoScore={setPlayerTwoScore}
-          flipBoard={flipBoard}
-          setFlipBoard={setFlipBoard}
-          board={board}
-          setBoard={setBoard}
-          playerTurn={playerTurn}
-          setPlayerTurn={setPlayerTurn}
-        />
-        <UserCard name="Player 1" playerOneScore={playerOneScore} />
-      </div>
+    <div className={`home`}>
+      <div className="home__wrapper">
+        <div className="home__intro">
+          <h1 className="home__title">Welcome to my chessboard</h1>
+          <img className="home__image" src={Knight} alt="" />
+          <p>This website was 100% made by me using React + Typescript</p>
+          <p>Feel free to demo my chessboard and when you want a challenge:</p>
 
-      <div className="home__settings">
-        {
-          <Link className={`home__link ${darkMode && "home__link--dark"}`} to={"/challenge"}>
+          <p>see the code here:</p>
+
+          <Link className={`home__link`} to={"/challenge"}>
             Challenge Me!
           </Link>
-        }
-
-        <Settings setFlipBoard={setFlipBoard} />
+        </div>
+        <div className="home__board-container">
+          <UserCard name="Player 2" playerTwoScore={playerTwoScore} alternate />
+          <ChessBoard
+            playerOneScore={playerOneScore}
+            playerTwoScore={playerTwoScore}
+            setPlayerOneScore={setPlayerOneScore}
+            setPlayerTwoScore={setPlayerTwoScore}
+            flipBoard={flipBoard}
+            board={board}
+            setBoard={setBoard}
+            playerTurn={playerTurn}
+            setPlayerTurn={setPlayerTurn}
+          />
+          <UserCard name="Player 1" playerOneScore={playerOneScore} />
+        </div>
       </div>
+
+      {/* <div className="home__settings">
+        <Settings setFlipBoard={setFlipBoard} />
+      </div> */}
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import { Tile } from "../../types";
-import { collection, doc, getDocs, getDoc, setDoc, onSnapshot } from "firebase/firestore";
+import { Comment, Tile } from "../../types";
+import { collection, doc, getDocs, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../contexts/FirebaseContext";
 
 export const uploadGame = async (
@@ -52,4 +52,20 @@ export const isAdmin = async (uid: string): Promise<boolean> => {
     return true;
   }
   return false;
+};
+
+export const addChatMessage = async (gameID: string, comment: Comment) => {
+  const chatlog = await getDoc(doc(db, "ChatLogs", gameID));
+  if (chatlog.data()) {
+    const comments = chatlog.data()!.comments;
+    await setDoc(doc(db, "ChatLogs", gameID), { comments: [...comments, comment] });
+  } else {
+    await setDoc(doc(db, "ChatLogs", gameID), { comments: [comment] });
+  }
+};
+
+export const getChatLog = async (gameID: string) => {
+  const game = await getDoc(doc(db, "ChatLogs", gameID));
+
+  return game.data()!.comments;
 };

@@ -5,30 +5,24 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 
 type Props = {
   setFlipBoard: Function;
+  setSettingsActive: Function;
 };
 
-function Settings({ setFlipBoard }: Props) {
+function Settings({ setFlipBoard, setSettingsActive }: Props) {
   const { theme, themeSwitcher, pieceSet, pieceSwitcher } = useContext(ThemeContext);
   const { darkMode, toggleMode } = useContext(DarkModeContext);
-  const [settingActive, setSettingActive] = useState<boolean>(true);
   const optionRef = useRef<HTMLDivElement>(null);
   return (
     <div className={`settings ${darkMode && "settings--dark"}`}>
       <h1>Settings:</h1>
       <button
+        className="settings__close"
         onClick={() => {
-          if (settingActive === false) {
-            optionRef.current?.classList.remove("settings__options--hide");
-            setSettingActive(true);
-          } else {
-            optionRef.current?.classList.add("settings__options--hide");
-            setSettingActive(false);
-          }
+          setSettingsActive(false);
         }}
       >
-        {settingActive ? "Hide Settings" : "Show Settings"}
+        X
       </button>
-
       <div ref={optionRef} className="settings__options">
         <button
           onClick={() => {
@@ -63,6 +57,7 @@ function Settings({ setFlipBoard }: Props) {
             >
               <option value="default">Default</option>
               <option value="red">Red</option>
+              <option value="blue">Blue</option>
             </select>
           </div>
 

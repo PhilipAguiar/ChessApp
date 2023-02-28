@@ -26,6 +26,13 @@
     }
   }
 
+  &--blue {
+    background-color: rgb(84, 84, 247);
+    &--alternate {
+      background-color: rgb(154, 154, 242);
+    }
+  }
+
   &--highlight {
     background-color: yellow;
     color: black;

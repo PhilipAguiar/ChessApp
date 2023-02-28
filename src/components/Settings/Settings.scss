@@ -2,7 +2,12 @@
 @use "../../styles/partials/colors" as *;
 
 .settings {
-  width: 90vw;
+  position: fixed;
+  background-color: white;
+  z-index: 2;
+  bottom: 5%;
+  width: 80vw;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,12 +16,10 @@
   border: 4px solid black;
   margin-top: 1rem;
   transition: background-color 0.5s, color 0.5s;
-  box-shadow: inset rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  @include tablet {
-    margin-top: 0;
-    width: 100%;
-  }
-
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  left: 0;
+  transform: translate(calc(50vw - 50%), calc(0));
+  animation: slide-up 0.5s;
   &--dark {
     @include dark-mode;
   }
@@ -70,32 +73,23 @@
     align-items: center;
     width: 100%;
     margin-top: 1rem;
-    animation: slide-down 1.4s;
-
-    &--hide {
-      animation: slide-up 0.8s;
-      max-height: 1px;
-      overflow-y: hidden;
-    }
   }
-}
 
-@keyframes slide-down {
-  from {
-    max-height: 1px;
-    overflow-y: hidden;
-  }
-  to {
-    max-height: 1000px;
+  &__close {
+    cursor: pointer;
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    background-color: transparent;
+    border: none;
   }
 }
 
 @keyframes slide-up {
   from {
-    max-height: 1000px;
+    bottom: -100%;
   }
   to {
-    max-height: 1px;
-    overflow-y: hidden;
+    bottom: 5%;
   }
 }

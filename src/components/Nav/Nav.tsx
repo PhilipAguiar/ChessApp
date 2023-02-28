@@ -1,29 +1,53 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/FirebaseContext";
+import Settings from "../Settings/Settings";
 import "./Nav.scss";
 
-function Nav() {
+type Props = {
+  setFlipBoard: Function;
+};
+
+function Nav({ setFlipBoard }: Props) {
   const { currentUser, signOut } = useAuth();
+  const [settingsActive, setSettingsActive] = useState(false);
+
   return (
     <div className="nav">
-      <div className="nav__wrapper">
+      <div>
         <Link className="nav__item" to={"/"}>
           Home
         </Link>
-      </div>
-      {!currentUser ? (
-        <Link className="nav__list-item" to={"/login"}>
-          Login
+        <Link className="nav__item" to={"/challenge"}>
+          Challenge
         </Link>
-      ) : (
-        <a
+      </div>
+      <div className="nav__wrapper">
+        <p
+          className="nav__item"
           onClick={() => {
-            signOut();
+            setSettingsActive(!settingsActive);
           }}
         >
-          Sign Out
-        </a>
-      )}
+          Settings
+        </p>
+
+        {!currentUser ? (
+          <Link className="nav__link" to={"/login"}>
+            Login
+          </Link>
+        ) : (
+          <a
+            className="nav__link"
+            onClick={() => {
+              signOut();
+            }}
+          >
+            Sign Out
+          </a>
+        )}
+      </div>
+      {settingsActive && <Settings setFlipBoard={setFlipBoard} setSettingsActive={setSettingsActive} />}
     </div>
   );
 }

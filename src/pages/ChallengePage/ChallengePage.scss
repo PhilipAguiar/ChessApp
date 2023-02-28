@@ -1,7 +1,34 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/colors" as *;
+
 .challenge {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 80vh;
+  align-items: center;
+  width: auto;
   margin: auto;
+
+  @include desktop {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  &__board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 66%;
+    height: 100%;
+    @include tablet {
+      width: auto;
+      justify-content: flex-start;
+    }
+  }
+
+  &__text {
+    text-align: center;
+    margin: 1rem 0;
+  }
 }
