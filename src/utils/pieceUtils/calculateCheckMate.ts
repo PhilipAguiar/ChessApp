@@ -110,7 +110,6 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
               break;
             }
             case "king":
-              console.log(kingMovement(newPiece, board));
               kingMovement(newPiece, board).forEach((test) => {
                 const newBoard = board.map((a) => {
                   return a.map((b) => {
@@ -136,8 +135,6 @@ export const calculateCheckMate = (board: Array<Array<Tile>>, playerTurn: string
     });
 
     if (isKingInCheck(board, opponentColor)) {
-      console.log("CHECK", checkmate);
-
       if (checkmate) {
         alert("CHECK MATE");
       }

@@ -122,7 +122,6 @@ function ChessBoard({
             }
           }
           if (location.pathname === "/challenge") {
-            console.log("first");
             let opponentColor: "white" | "black" = playerTurn === "white" ? "black" : "white";
             newBoard.forEach((row) => {
               row.forEach((item) => {
@@ -133,7 +132,6 @@ function ChessBoard({
           }
 
           if (location.pathname === "/admin") {
-            console.log("first");
             let opponentColor: "white" | "black" = playerTurn === "white" ? "black" : "white";
             newBoard.forEach((row) => {
               row.forEach((item) => {

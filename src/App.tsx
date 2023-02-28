@@ -21,7 +21,6 @@ function App() {
   useEffect(() => {
     if (currentUser) {
       isAdmin(currentUser.uid).then((res: any) => {
-        console.log(res);
         setIsUserAdmin(res);
       });
     }
